@@ -1,0 +1,786 @@
+
+
+{
+  "pages": [
+    {
+      
+      "image": "",
+      "title": "Cookies Policy",
+      "description": "Florian Klampfer qwtel.com (“us”, “we”, or “our”) uses cookies on this website (the “Service”). By using the Service, you consent to the use of cookies.\n",
+      "content": "Last updated: November 25, 2017\n\nFlorian Klampfer qwtel.com (“us”, “we”, or “our”) uses cookies on the https://qwtel.com/ website (the “Service”). By using the Service, you consent to the use of cookies.\n\nOur Cookies Policy explains what cookies are, how we use cookies, how third-parties we may partner with may use cookies on the Service, your choices regarding cookies and further information about cookies.\n\nWhat are cookies\n\nCookies are small pieces of text sent to your web browser by a website you visit. A cookie file is stored in your web browser and allows the Service or a third-party to recognize you and make your next visit easier and the Service more useful to you.\n\nCookies can be “persistent” or “session” cookies. Persistent cookies remain on your personal computer or mobile device when you go offline, while session cookies are deleted as soon as you close your web browser.\n\nHow Florian Klampfer qwtel.com uses cookies\n\nWhen you use and access the Service, we may place a number of cookies files in your web browser.\n\nWe use cookies for the following purposes:\n\n\n  \n    To enable certain functions of the Service\n  \n  \n    To provide analytics\n  \n\n\nWe use both session and persistent cookies on the Service and we use different types of cookies to run the Service:\n\n\n  \n    Essential cookies. We may use essential cookies to authenticate users and prevent fraudulent use of user accounts.\n  \n  \n    Analytics cookies. We may use analytics cookies to track information how the Service is used so that we can make improvements. We may also use analytics cookies to test new advertisements, pages, features or new functionality of the Service to see how our users react to them.\n  \n\n\nThird-party cookies\n\nIn addition to our own cookies, we may also use various third-parties cookies to report usage statistics of the Service, deliver advertisements on and through the Service, and so on.\n\nWhat are your choices regarding cookies\n\nIf you’d like to delete cookies or instruct your web browser to delete or refuse cookies, please visit the help pages of your web browser.\n\nPlease note, however, that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer, you may not be able to store your preferences, and some of our pages might not display properly.\n\n\n  \n    For the Chrome web browser, please visit this page from Google:\nhttps://support.google.com/accounts/answer/32050\n  \n  \n    For the Internet Explorer web browser, please visit this page from Microsoft:\nhttp://support.microsoft.com/kb/278835\n  \n  \n    For the Firefox web browser, please visit this page from Mozilla:\nhttps://support.mozilla.org/en-US/kb/delete-cookies-remove-info-websites-stored\n  \n  \n    For the Safari web browser, please visit this page from Apple:\nhttps://support.apple.com/kb/PH21411?locale=en_US\n  \n  \n    For any other web browser, please visit your web browser’s official web pages.\n  \n\n\nWhere can you find more information about cookies\n\nYou can learn more about cookies and the following third-party websites:\n\n\n  AllAboutCookies\n  http://www.allaboutcookies.org/\n  Network Advertising Initiative\n  http://www.networkadvertising.org/\n\n\nWhat are your choices regarding annoying cookie banners?\n\nYou can get rid of annoying cookie banners on many sites by using a browser addon to automatically accept cookies:\n\n\n  I Don’t Care About Cookies\n  https://www.i-dont-care-about-cookies.eu/\n  CookiesOK\n  https://cookiesok.com/\n\n",
+      "url": "/cookies-policy/"
+    }
+  ], 
+  "documents": [
+    {
+      
+      "image": "",
+      "title": "Bresenham’s Line Algorithm in Java Part I",
+      "date": "2012-10-08 00:00:00 +0700",
+      
+      "content": "Obwohl ich mich bereits ein Semester lang mit der Theorie der Grafikpipeline beschäftigen durfte wäre ich bisher nicht auf die Idee gekommen dieses Monstrum mit all seinen 4-dimensinalen Transformationsmatrizententakeln auch zu implementieren. Die diessemestrige Übung “Computergrafik” wird dieses Defizit beheben, denn - wie sollte es anders sein - es wird ein Software Renderer geschrieben werden.\n\nZur Hilfe kommt mir ein ganz wunderbares Übungs-Framework, welches einem alle Nebenaufgaben bereits abgenommen hat und einen Schritt für Schritt durch die Grafik Pipeline babysittet. Programmieren nach Zahlen, sozusagen. Als netten Nebeneffekt kann ich über nicht-ganz-so-triviale Programmieraufgaben bloggen.\n\nBereits die erste Teilaufgabe, das Zeichnen von Linien mittels Bresenham’s Algorithmus, bietet jede Menge Gelegenheiten von der eigentlichen Aufgabe abzuweichen und abzudriften in die Tiefen der objektorientierten Misskonzeption. Aber zunächst eine friedliche, prozedurale Version:\n\nPseudocode\nDer Pseudocode, aus dem Skriptum der Vorlesung übernommen, ist kurz und übersichtlich.\n\nstore left line endpoint in (x0, y0)\nplot pixel (x0, y0)\ncalculate constants ∆x, ∆y, 2∆x, 2∆y, 2∆y - 2∆x\nobtain p = 2∆y - ∆x\nAt each xk along the line, perform test:\n    if p &lt; 0 then plot pixel (xk+1, yk); p = p + 2∆y\n    else plot pixel (xk+1, yk+1); p = p + 2dy - 2∆x\n\n\nJava\nAuch eine erste Umsetzung in Java sieht noch ganz gut aus:\n\nint deltaX = Math.abs(x2 - x1);\nint deltaY = Math.abs(y2 - y1);\n\nint x = x1;\nint y = y1;\n\nint sx = (int)Math.signum(x2 - x1);\nint sy = (int)Math.signum(y2 - y1);\n\nint p = 2*deltaY - deltaX;\n\nfor (int i = 0; i &lt;= deltaX; ++i) {\n    framebuffer.setPixel(x, y, Vec3.one);\n\n    x += sx;\n\n    if (p &lt; 0) {\n        p += 2*deltaY;\n    }\n    else {\n        p += 2*deltaY - 2*deltaX;\n        y += sy;\n    }\n}\n\n\nDie Ähnlichkeit mit dem Pseudocode ist diesem Abschnitt noch anzusehen, allerdings werden hier bereits 2 Sonderfälle berücksichtigt.\n\n\n  Ist x2 kleiner als x1 wird “von rechts nach links” gezeichnet, was bedeutet dass x dekrementiert werden muss.\n  Ist y2 kleienr als y1 besitzt fällt die Linie und der y-Wert muss kleiner werden.\n\n\nDer erst Fall wird behandelt, indem jeweils sx addiert wird, welches 1 oder -1 enthält und damit x++ oder x-- simuliert. Der zweite Fall verhält sich analog. (Ein weiterer Sonderfall tritt ein, wenn x1 == x2 ist, das wird aber von der signum Funktion abgedeckt, welche dann 0 liefert)\n\nWas diesem Abschnitt fehlt, ist die Berücksichtigung des Falls, in dem der Betrag der Steigung &gt; 1 ist. Dieser Fall kann allerdings mit dem bereits vorhandenen Code abgedeckt werden indem man die Achsen vertauscht:\n\nSpecial case ∆y &gt; ∆x\nint deltaX = Math.abs(x2 - x1);\nint deltaY = Math.abs(y2 - y1);\nboolean swapped = false;\n\n// Swap axis if the slope is &gt; 1\nif (deltaY &gt; deltaX) {\n    int swp = x1;\n    x1 = y1;\n    y1 = swp;\n\n    swp = x2;\n    x2 = y2;\n    y2 = swp;\n\n    swp = deltaX;\n    deltaX = deltaY;\n    deltaY = swp;\n\n    swapped = true;\n}\n\nint x = x1;\nint y = y1;\n\nint sx = (int)Math.signum(x2 - x1);\nint sy = (int)Math.signum(y2 - y1);\n\nint p = 2*deltaY - deltaX;\n\nfor (int i = 0; i &lt;= deltaX; ++i) {\n    if (swapped) {\n        framebuffer.setPixel(y, x, Vec3.one);\n    }\n    else {\n        framebuffer.setPixel(x, y, Vec3.one);\n    }\n\n    x += sx;\n\n    if (p &lt; 0) {\n        p += 2*deltaY;\n    }\n    else {\n        p += 2*deltaY - 2*deltaX;\n        y += sy;\n    }\n}\n\n\nZu beachten ist, dass beim Zeichnen eines Punktes das Vertauschen der Achsen ein weiteres mal berücksichtigt werden muss.\n\nDas Ergebnis ist zwar immer noch gut lesbar, weicht aber reltativ stark vom Pseudocode ab, ebenso von der ersten Java Umsetzung.\n\nSchöner wäre es, den Algorithmus in seiner minimalen Form zu implementieren und die Sonderfälle bei Bedarf zu “patchen”. Dazu werde ich im nächsten Post auf eine alternative Implementierung eingehen, welche allerdings ein ganzes Regiment an Interfaces und Klassen nach sich zieht, weshalb die Sinnhaftigkeit des Ansatzes sehr wohl bezweifeln darf.\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/bresenhams-line-algorithm-in-java-part-i/"
+    },{
+      
+      "image": "",
+      "title": "Bresenham’s Line Algorithm in Java Part II",
+      "date": "2012-10-09 00:00:00 +0700",
+      
+      "content": "Aufbauend auf den vorigen Post hier eine alternative Implementierung des Bresenham Algorithmus, welche stark auf objektorientierte Techniken zurückgreift.\n\nMotivation hierfür ist, dass die prozedurale Umsetzung den grundlegenden Algorithmus durch die Berücksichtigung des Sonderfalls verkompliziert.\n\nMinimal viable algorithm\nZunächst die Klasse zum Zeichnen der Linien, welche nur die minimale Funktionalität zur Verfügung stellt:\n\nclass BresenhamLineDrawer implements LineDrawer {\n    private PixelSetter buffer;\n    public BresenhamLineDrawer(PixelSetter buffer) {\n        this.buffer = buffer;\n    }\n\n    @Override\n    public void drawLine(int x1, int y1, int x2, int y2) {\n        int deltaX = Math.abs(x2 - x1);\n        int deltaY = Math.abs(y2 - y1);\n\n        int x = x1;\n        int y = y1;\n\n        int sx = (int)Math.signum(x2 - x1);\n        int sy = (int)Math.signum(y2 - y1);\n\n        int p = 2*deltaY - deltaX;\n\n        for (int i=0; i  deltaX) {\n    buffer = new PixelSetterDecorator(buffer);\n}\n\nLineDrawer lineDrawer = new BresenhamLineDrawer(buffer);\nif (deltaY &amp;gt; deltaX) {\n    lineDrawer = new LineDrawerDecorator(lineDrawer);\n}\n\nlineDrawer.drawLine(x1, y1, x2, y2);\n\n\n\n\nDer Vollständigkeit halber hier die beiden Interfaces LineDrawer und PixelSetter:\n\ninterface LineDrawer {\n    public void drawLine(int x1, int y1, int x2, int y2);\n}\n\ninterface PixelSetter {\n    public void setPixel(int x, int y);\n}\n\n\nCode: https://gist.github.com/qwtel/5804291\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/bresenhams-line-algorithm-in-java-part-ii/"
+    },{
+      
+      "image": "",
+      "title": "Fun with Matrices",
+      "date": "2012-10-09 00:00:00 +0700",
+      
+      "content": "In der nächsten Teilaufgabe meines Software Renderers geht es um 3d Transformationen. Dazu verwendet man 4-dimensionale Transformationsmatrizen, wobei die zusätzliche Dimension benötigt wird um auch Translationen durch eine Multiplikation ausdrücken zu können.\n\nDie Funktion zum Multiplizieren von zwei 4x4 Matrizen sieht so aus:\n\npublic static Mat4 mul (Mat4 A, Mat4 B) {\n    return new Mat4(\n        A.m00*B.m00 + A.m01*B.m10 + A.m02*B.m20 + A.m03*B.m30,\n        A.m00*B.m01 + A.m01*B.m11 + A.m02*B.m21 + A.m03*B.m31,\n        A.m00*B.m02 + A.m01*B.m12 + A.m02*B.m22 + A.m03*B.m32,\n        A.m00*B.m03 + A.m01*B.m13 + A.m02*B.m23 + A.m03*B.m33,\n        A.m10*B.m00 + A.m11*B.m10 + A.m12*B.m20 + A.m13*B.m30,\n        A.m10*B.m01 + A.m11*B.m11 + A.m12*B.m21 + A.m13*B.m31,\n        A.m10*B.m02 + A.m11*B.m12 + A.m12*B.m22 + A.m13*B.m32,\n        A.m10*B.m03 + A.m11*B.m13 + A.m12*B.m23 + A.m13*B.m33,\n        A.m20*B.m00 + A.m21*B.m10 + A.m22*B.m20 + A.m23*B.m30,\n        A.m20*B.m01 + A.m21*B.m11 + A.m22*B.m21 + A.m23*B.m31,\n        A.m20*B.m02 + A.m21*B.m12 + A.m22*B.m22 + A.m23*B.m32,\n        A.m20*B.m03 + A.m21*B.m13 + A.m22*B.m23 + A.m23*B.m33,\n        A.m30*B.m00 + A.m31*B.m10 + A.m32*B.m20 + A.m33*B.m30,\n        A.m30*B.m01 + A.m31*B.m11 + A.m32*B.m21 + A.m33*B.m31,\n        A.m30*B.m02 + A.m31*B.m12 + A.m32*B.m22 + A.m33*B.m32,\n        A.m30*B.m03 + A.m31*B.m13 + A.m32*B.m23 + A.m33*B.m33\n    );\n}\n\n\nAn einer anderen Stelle habe ich die 2x2 Matrix-Multiplikation implementiert:\n\npublic static Mat2 mul (Mat2 A, Mat2 B) {\n    return new Mat2(\n        A.m00*B.m00 + A.m01*B.m10,\n        A.m00*B.m01 + A.m01*B.m11,\n        A.m10*B.m00 + A.m11*B.m10,\n        A.m10*B.m01 + A.m11*B.m11\n    );\n}\n\n\nDer Matrizenmultiplikation fehlen einige mathematische Eigenschaften, die man von natürlichen Zahlen her gewöhnt ist. Beispielsweise ist sie nicht kommutativ. Dafür hat sie andere recht interessante Eigenschaften, die sich gut mit DRY verbinden lassen:\n\nVerwende ich statt der regulären Multiplikation und Addition jeweils die 2d-Matrix Varianten, kann ich meine 4x4 Matrix betrachten, als würde sie aus vier 2x2 Matrizen bestehen und es gilt\n\n[abcd]×[efgh]=[ae+bgaf+bhce+dgcf+dh]\\begin{bmatrix}\n  a &amp; b \\\\\n  c &amp; d\n\\end{bmatrix}\n\\times\n\\begin{bmatrix}\n  e &amp; f \\\\\n  g &amp; h\n\\end{bmatrix}\n=\n\\begin{bmatrix}\n  ae + bg &amp; af + bh \\\\\n  ce + dg &amp; cf + dh\n\\end{bmatrix}[ac​bd​]×[eg​fh​]=[ae+bgce+dg​af+bhcf+dh​]\n\nwobei aaa, bbb, ccc, usw. jeweils 2x2 Matrizen repräsentieren und sich das ganze selbst wieder wie eine 2x2 Matrix verhält.\n\nFür meinen Code bedeutet das, dass ich für meine mul Methode in Mat4 auf Mat2.mul zurück greifen kann und sie dadruch etwas kompakter anschreiben kann:\n\npublic static Mat4 mul (Mat4 A, Mat4 B) {\n    Mat2[] a = A.split();\n    Mat2[] b = B.split();\n\n    return new Mat4(\n        Mat2.add(Mat2.mul(a[0], b[0]), Mat2.mul(a[1], b[2])),\n        Mat2.add(Mat2.mul(a[0], b[1]), Mat2.mul(a[1], b[3])),\n        Mat2.add(Mat2.mul(a[2], b[0]), Mat2.mul(a[3], b[2])),\n        Mat2.add(Mat2.mul(a[2], b[1]), Mat2.mul(a[3], b[3]))\n    );\n}\n\n\nDie Funktion split macht dabei nichts weiter als die 4x4 Matrix in 2x2er zu unterteilen. (Sinnvoll wäre es die Werte der 4x4 Matrix von vornherein in Mat2 Objekten zu speichern, was in meinem Fall aber nicht problemlos möglich war)\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/fun-with-matrices/"
+    },{
+      
+      "image": "",
+      "title": "Soundcloud 1997",
+      "date": "2013-06-16 00:00:00 +0700",
+      
+      "content": "\n\nAnother assignment was to take a popular website back to 1997 like these guys. Here’s how Soundcloud could have looked like. Mind the triple MC Hammer ;)\n\n",
+      "categories": ["random"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/random/soundcloud-1997/"
+    },{
+      
+      "image": "",
+      "title": "How to Port SVN to Git on Mac OS X",
+      "date": "2013-06-19 00:00:00 +0700",
+      
+      "content": "tl;dr\n\nsudo gem install svn2git\ntouch authors.txt\necho \"svn_name1 = Firstname Lastname &lt;your.email&gt;\" &gt;&gt; authors.txt\nmkdir project\ncd project\nsvn info https://svn.example.com/project\nsvn2git https://svn.example.com/project --verbose --authors ../authors.txt\n\n\nThis was a tricky one. First you need to find out whether the svn module for git is installed. You can do this by running git svn --help. In case it is not installed you can get it by (re-)installing git via homebrew. In case you don’t have homebrew it get gets even trickier, but I found a nice tutorial here.\n\nThe next thing you want is svn2git. You can install it via sudo gem install svn2git, which worked effortlessly since ruby and gem were pre-installed.\n\nNow you should create a authors.txt file which maps svn usernames to git names and emails. It looks like this:\n\nsvn_name1 = Firstname Lastname &lt;your.email&gt;\nsvn_name2 = Firstname Lastname &lt;other.email&gt;\n\n\nInvoke svn2git https://svn.example.com/repo  --verbose in a new folder with the URL to your svn repo. I suggest adding --verbose to get some idea about whats happening.\n\nI my case it didn’t work. The reason were the SSL certificate and the password protection of the svn repo. The README suggests adding the username with --username but it did not work. Instead I logged into the repository via svn info https://svn.example.com/repo. There I got prompted to insert my username and password. After that I was asked to accept the certificate. I chose p to accept it permanently.\n\nWith the shadow of the login we can now invoke\n\nsvn2git https://svn.example.com/repo --verbose --authors /path/to/authors.txt\n\n\nHowever, I still got an error: svn2git 'master' did not match any file(s) known to git. To prevent this I added the --rootistrunk flag. Note that this only works after removing the git folder with rm -r .git/ . &lt;/other.email&gt;&lt;/your.email&gt;&lt;/your.email&gt;\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/how-to-port-svn-to-git-on-mac-os-x/"
+    },{
+      
+      "image": "",
+      "title": "require.js Isn’t Too Bad after All",
+      "date": "2013-06-27 00:00:00 +0700",
+      
+      "content": "I remember working with require.js a while ago in conjunction with Backbone. I stumbled upon it in some tutorial that used it, so I used it as well, not really knowing why.\n\nWhat I remember is, that the experience was pretty unpleasant, mainly because I spent a lot of time looking for forks of the libraries I wanted to use and then spending even more time when new versions were available. (I also remember a lot of strange errors…)\n\nOne year passed.\n\nTurns out require has addressed this issue since then with something called shim (why is it called like that?). It allows you to turn any JS library into a require module, like this:\n\nrequire.config\n  paths:\n    jquery: 'lib/jquery-2.0.2'\n    underscore: 'lib/underscore-1.4.4'\n    backbone: 'lib/backbone-1.0.0'\n\n  shim:\n    underscore:\n      exports: \"_\"\n    backbone:\n      deps: [\"underscore\", \"jquery\"]\n      exports: \"Backbone\"\n\n\nThat was so easy, I didn’t even believe it would work (but it did). After that I was able to use my libraries just as I was used to with the forked versions:\n\nrequire [\n  'jquery'\n  'backbone'\n  'models/clockmodel'\n  'views/clockview'\n], ($, Backbone, ClockModel, ClockView) -&gt;\n\n\nPretty neat!\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/requirejs-isnt-to-bad-after-all/"
+    },{
+      
+      "image": "",
+      "title": "Hacking tumblr into Becoming a CMS",
+      "date": "2013-07-07 00:00:00 +0700",
+      
+      "content": "Well, tumblr can’t be extended like Wordpress to become a very general-purpose CMS, but with a few little hacks at least custom layouts for projects or images are possible.\n\nWe are not going to create a Custom Page™ (like bio, contact, etc), since we want to use our tumblr content from the dashboard. Instead we will use tag pages, like /tagged/tagname, which list all posts of a given tag. Normally those will use your blog’s default layout, however we can force it to use a our own layout so that it looks more like a portfolio or a gallery.\n\nThe central “hack” is this:\n\n{block:TagPage}\n  &lt;div id=\"tag-{Tag}\"&gt;\n{/block:TagPage}\n{block:Posts}\n  &lt;!-- other stuff --&gt;\n\n\nWith this little trick we can wrap a div around all posts. The id of the div depends on the tag, allowing us to create individual layouts.\n\nWe have to close the div tag again after the closing block tag:\n\n{/block:Posts}          \n{block:TagPage}\n  &lt;/div&gt;\n{/block:TagPage}\n\n\nThis will be helpful in two ways:\n\n\n  We can target everything inside with custom CSS\n  If CSS is not sufficient for our needs, we can target the content with JavaScript as well, giving us almost unlimited possibilities for the structure and style of the posts.\n\n\nAd 1.\n\nWe have to prefix all styles accordingly. In this case everything should apply to the projects page.\n\n#tag-project article p .preview {\n  height: 220px;\n  background-position: top center;\n  background-size: cover;\n}\n\n\nNote that these rules only apply if you are at the tag page. That’s the case when the URL looks like this: /tagged/project. You can create an entry in the menu via a tumblr page that redirects to that particular path.\n\nAd 2.\n\nWhen CSS is not enough you can do even wilder things using JavaScript. Here I am wrapping every first image of a post in a div (while hiding everything else) and setting the background-image of that div to the source of the image, so that the CSS rules from earlier apply.\n\n$(function() {\n  $('#tag-project article').each(function() {\n    $(this).find('p').hide()\n    var src = $(this).find('img').attr('src')\n    $(this).find('img').first().hide().wrap('&lt;div class=\"preview\" style=\"background-image: url(\\''+src+'\\')\"&gt;&lt;/div&gt;').parents('p').show()\n  })\n})\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/hacking-tumblr-into-becoming-a-cms/"
+    },{
+      
+      "image": "",
+      "title": "Coding Horror: Why Can’t Programmers.. Program?",
+      "date": "2013-07-12 00:00:00 +0700",
+      
+      "content": "I just stumbled upon this and was shocked: Apparently programmers struggle even with the simplest of problems. What if I was one of them?\n\n\n  Write a program that prints the numbers from 1 to 100. But for multiples of three print “Fizz” instead of the number and for the multiples of five print “Buzz”. For numbers which are multiples of both three and five print “FizzBuzz”.\n\n\nFive minutes later I was relieved:\n\nval fizzBuzz = (1 to 100).map(n =&gt;\n  if (n%3 == 0 &amp;&amp; n%5 == 0) \"FizzBuzz\"\n  else if (n%3 == 0) \"Fizz\"\n  else if (n%5 == 0) \"Buzz\"\n  else n\n)\n\nprintln(fizzBuzz.mkString(\"\\n\"))\n\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/coding-horror-why-cant-programmers-program/"
+    },{
+      
+      "image": "",
+      "title": "Exporting and Importing a MongoDB from a Meteor App",
+      "date": "2013-07-15 00:00:00 +0700",
+      
+      "content": "First get the credentials of the mongodb of the meteor app with\n\nmeteor mongo --url OLDNAME.meteor.com\n\n\nIt yields something like\n\nmongodb://client:95d0e385-e193-b17a-b69a-85fd6d3f6a04@production-db-a1.meteor.io:27017/twatpsq_meteor_com\n\n\nThe “password” (the uuid-looking thing) will be valid for one minute.\n\nUsing mongodump, getting a snapshot of the db by invoking\n\nmongodump -u client -h production-db-a1.meteor.io:27017 -d OLDNAME_meteor_com -p 95d0e385-e193-b17a-b69a-85fd6d3f6a04\n\n\nThe dump (a bunch of .bson files) will be inside ./dump/OLDNAME_meteor_com/.\n\nUsing mongorestore, applying the snapshot to the new db (get the password as shown above) with\n\nmongorestore -u client -h production-db-a1.meteor.io:27017 -d NEWNAME_meteor_com -p cc7bd4e2-9b1d-fd99-0940-7c49193f5664 dump/OLDNAME_meteor_com/\n\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/exporting-and-importing-a-mongodb-from-a-meteor-app/"
+    },{
+      
+      "image": "",
+      "title": "Installing octave on Mac OS X via homebrew",
+      "date": "2013-07-30 00:00:00 +0700",
+      
+      "content": "There is something you need to know, because brew install octave won’t do it:\n\nError: No available formula for octave\n\n\nFor some reason you have to tell homebrew that you are a scientist before you get the formula:\n\nbrew tap homebrew/science\n\n\nAfter that everything works fine. Here is a list of all the new formulas you get: https://github.com/Homebrew/homebrew-science\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/installing-octave-on-mac-os-x-via-homebrew/"
+    },{
+      
+      "image": "",
+      "title": "Vim is Dead, Long Live the Vim",
+      "date": "2013-08-15 00:00:00 +0700",
+      
+      "content": "tl;dr: Use a Vim plugin.\n\nSince the recent release of version 7.4 I thought it would be appropriate to declare Vim officially dead and by “officially” I mean within my personal, narrow view of the world also known as the “Monarchical Republic of Me” (morom).\n\nI learned Vim out of one of the two possible reasons you could learn Vim: You are either old enough (to be of that era) or young enough (to blindly follow anything the “cool kids” do).\nI strongly advice against learning Vim out of “efficiency” reasons. In fact the “efficiency” of Vim could easily be only psychological. Sorry to say, but for me, Vim is about visible productivity and the fact that I no longer know how to use a regular editor.\n\nTo be fair, Vim gave me the possibility to do one thing that I wasn’t able to do before (and I tried), which is working on the go. Without the need for a mouse, it doesn’t matter if you are in the office, on a train oder hanging upside down from a tree with your fingertips touching the ground. (see Extreme Programming for comic relief)\n\nHowever, my use of Vim has declined over time. I remember my early days in college when I would still do all Java editing in Vim and use an IDE only when absolutely necessary, remembering all variable and method names (autocompletion was for wimps) and constantly multitasking:\n\nI really like the idea of one thing doing… one thing. Like an editor doing editing, a file browser doing file browsing and an Integrated Development Environment (which shouldn’t exist by that standard) doing everything else. Well, it seems that IDEs were just more practical.\n\nLike many I tried to bring IDE features to Vim at first, rather reluctant so, since I didn’t trust those plugins could match dedicated efforts of IDE developers. For me they didn’t.\n\nI remember eclim being one particular failed attempt to do so, probably because I was unable to set it up properly. But since it didn’t work in the end, it didn’t work in the end. The idea behind eclim is good though, so you might want to give it a try.\n\nI turned my efforts upside down and instead tried to bring Vim to the IDEs. By that time I already had one project gone bad for me and my partner in part due to my anti-IDE attitude. (Ok, we still got an A, but by my standards it wasn’t a success).\n\nThe first Vim plugin I tried was Vrapper for Eclipse. The setup was so easy and it worked so well, that I knew that this the way to go. Vrapper even allowed some kind of .vimrc file (mappings!), though not at full Vim capacity as far as I can recall. I could do real work again.\n\nBeing forced to use NetBeans in another course, I gave jVi at try. It has become my favorite Vim plugin since then. It’s almost a direct port of the original Vim code to Java and therefore behaves exactly like one would expect, including (almost?) complete .vimrc capabilities.\n\nHowever, there has been a stronghold of Vim for me, namely web development. JavaScript, CoffeeScript, Python, other dynamically typed languages, HTML and CSS make a good  match for classic editors, since those languages are fault tolerant - or so it seemed - and there are no good IDEs available anyway - or so I thought.\n\nBut that bastion fell when I found WebStorm. Being already sold to IntelliJ (and its suboptimal but very much existing Vim plugin IdeaVim) I was amazed to have almost all the IDE goodness for web development while maintaining the goodness of Vim as well.\n\nSo Vim is dead, long live The Vim.\n\nThis post was written using Vim.\n\n",
+      "categories": ["random"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/random/vim-is-dead-long-live-the-vim/"
+    },{
+      
+      "image": "",
+      "title": "Tiny Recursions I",
+      "date": "2013-08-25 00:00:00 +0700",
+      
+      "content": "I just wanted to figure out whether I could do this quickly: Mapping Hindu-Arabic numerals to their Roman equivalents.\n\nI’ve come up with a easy to read recursive solution:\n\n@toRoman = (num) -&gt;\n  if num &gt;= 1000 then \"M\" + toRoman(num - 1000)\n  else if num &gt;= 900 then \"CM\" + toRoman(num - 900)\n  else if num &gt;= 500 then \"D\" + toRoman(num - 500)\n  else if num &gt;= 400 then \"CD\" + toRoman(num - 400)\n  else if num &gt;= 100 then \"C\" + toRoman(num - 100)\n  else if num &gt;= 90 then \"XC\" + toRoman(num - 90)\n  else if num &gt;= 50 then \"L\" + toRoman(num - 50)\n  else if num &gt;= 40 then \"XL\" + toRoman(num - 40)\n  else if num &gt;= 10 then \"X\" + toRoman(num - 10)\n  else if num == 9 then \"IX\" + toRoman(num - 9)\n  else if num &gt;= 5 then \"V\" + toRoman(num - 5)\n  else if num == 4 then \"IV\" + toRoman(num - 4)\n  else if num &gt;= 1 then \"I\" + toRoman(num - 1)\n  else \"\"\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/tiny-recursions-i/"
+    },{
+      
+      "image": "",
+      "title": "Tiny Recursions II",
+      "date": "2013-09-24 00:00:00 +0700",
+      
+      "content": "Came up with a short, recursive algorithm to calculate the perimeter of Koch snowflakes (Note that I wrote the code before looking it up on Wikipedia).\n\ndef koch(length: Double, it: Int): Double = {\n  def kochRec(currLength: Double, currIt: Int): Double = {\n    if (currIt == 0) currLength\n    else 4 * kochRec(currLength / 3, currIt - 1)\n  }\n  3 * kochRec(length, it)\n}\n\n\nThe idea is this: Looking at only one side of the triangle, every iteration gives another four sides at 1/3 of it’s previous length. Multiplying by three at the end gives the correct perimeter after it iterations.\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/tiny-recursions-ii/"
+    },{
+      
+      "image": "",
+      "title": "Scala vs. JavaScript Performance for BBP",
+      "date": "2013-10-12 00:00:00 +0700",
+      
+      "content": "Basically I have an implementation of the BBP algorithm to calculate arbitrary hex digits of Pi. Thanks to this blog post I was able to write a version in Scala, and then another version in JavaScript.\n\nI modified the algorithm to split the calculation into equal sizes (2,500,000 loop iterations). You can look at both versions here.\n\nI was quite surprised when I did a first test run on node.js (v0.10.7). The JS version was just a few seconds behind the Scala version per task. What I expected was an order of magnitude, not just a bit.\n\nThe tests look like this and are generated by the Scala version (with the Scala time filled in).\n\nvar start = Date.now(); console.log(arrays_equal(task(1, 10000000, 1, 0.0), [2500001, 0.9343597446633509, false]), 'Scala: 9907 vs JavaScript: ' + (Date.now() - start));\n\n\nThe parameters are actual ones that arise when calculating the billionth digit.\n\nHere are the node results:\n\ntrue 'Scala: 9671 vs JavaScript: 11472'\ntrue 'Scala: 9907 vs JavaScript: 11090'\ntrue 'Scala: 9938 vs JavaScript: 11110'\ntrue 'Scala: 9975 vs JavaScript: 10970'\ntrue 'Scala: 9704 vs JavaScript: 10744'\ntrue 'Scala: 9663 vs JavaScript: 10822'\ntrue 'Scala: 9626 vs JavaScript: 10787'\ntrue 'Scala: 9701 vs JavaScript: 10785'\ntrue 'Scala: 9358 vs JavaScript: 10405'\ntrue 'Scala: 9289 vs JavaScript: 10417'\ntrue 'Scala: 9329 vs JavaScript: 10507'\ntrue 'Scala: 9407 vs JavaScript: 10404'\ntrue 'Scala: 8536 vs JavaScript: 9472'\n\n\nI was even more surprised when I let the code run in the latest version of Chrome (30.0.1599.69). Here the JS version was faster than the Scala version!\n\ntrue \"Scala: 9671 vs JavaScript: 9435\"\ntrue \"Scala: 9907 vs JavaScript: 9124\"\ntrue \"Scala: 9938 vs JavaScript: 9096\"\ntrue \"Scala: 9975 vs JavaScript: 9094\"\ntrue \"Scala: 9704 vs JavaScript: 8905\"\ntrue \"Scala: 9663 vs JavaScript: 8906\"\ntrue \"Scala: 9626 vs JavaScript: 8917\"\ntrue \"Scala: 9701 vs JavaScript: 8907\"\ntrue \"Scala: 9358 vs JavaScript: 8687\"\ntrue \"Scala: 9289 vs JavaScript: 8647\"\ntrue \"Scala: 9329 vs JavaScript: 8656\"\ntrue \"Scala: 9407 vs JavaScript: 8671\"\ntrue \"Scala: 8536 vs JavaScript: 7908\"\n\n\nI wonder if there are any obvious bottle necks in the Scala version.\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/scala-vs-javascript-performance-for-bbp/"
+    },{
+      
+      "image": "",
+      "title": "Decluttering the GAE Datastore API with Scala",
+      "date": "2013-10-13 00:00:00 +0700",
+      
+      "content": "Working with the Google App Engine Query API means a lot of boilerplate code. In Java there is no way around it.\n\nHere is what a really simple query looks like:\n\nQuery q = new Query(\"Work\").setFilter(\n  CompositeFilterOperator.and(\n    new FilterPredicate(\"c\", FilterOperator.EQUAL, work.c),\n    new FilterPredicate(\"m\", FilterOperator.EQUAL, work.m),\n    new FilterPredicate(\"digitPos\", FilterOperator.EQUAL, work.digitPos)\n  )\n)\n\n\nFortunately in Scala we can remove the clutter by adding imports and defining an implicit conversion:\n\nimport FilterOperator._\nimport CompositeFilterOperator._\n\nimplicit def tuple2FilterPredicate(x: (String, FilterOperator, Any)): FilterPredicate = {\n  new FilterPredicate(x._1, x._2, x._3)\n}\n\n\nWhich makes the API look much more like MongoDB :)\n\nval q = new Query(\"Work\").setFilter {\n  and (\n    (\"c\", EQUAL, work.c),\n    (\"m\", EQUAL, work.m),\n    (\"digitPos\", EQUAL, work.digitPos)\n  )\n}\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/decluttering-the-gae-datastore-api-with-scala/"
+    },{
+      
+      "image": "",
+      "title": "An Experiment in Code Redundancy",
+      "date": "2013-11-14 00:00:00 +0700",
+      
+      "content": "When writing software we face a lot of uncertainty. Even when properly tested there is no guarantee that code\nis really bug-free. The best way to combat uncertainty is redundancy. Nature figured this out for us, this is why we have\ntwo eyes, two lungs, two kidneys, etc. We also use a lot of redundancy in software, for example in file storage.\nHowever, so far there’s not much redundancy in the code itself. Usually there is exactly one piece of code for\nany given task.\n\nrdndc for Java is an experiment in code redundancy, which allows you to write multiple implementations of methods\n(and to some extent classes) that will be used based on some strategy. Redundant implementations of methods can be\ninvoked probabilistically or as a fall back if an exception gets thrown.\n\nExample\n\n// different invokers use different strategies\nInvoker invoker = new RandomInvoker(this);\n\n // public stub\npublic String format(String digits) {\n    // the invoker chooses the implementation\n    return (String) invoker.invoke(\"format\", digits);\n}\n\n// mark method as redundant\n@rdndc(\"format\")\n// private implementation\nprivate String librarianFormat(String digits) {\n    return String.format(\"%05d\", Integer.parseInt(digits));\n}\n\n// mark method as redundant\n@rdndc(\"format\")\n// another implementation\nprivate String functionalFormat(String digits) {\n    if (digits.length() &gt;= 5) return digits;\n    else return functionalFormat('0' + digits);\n}\n\n\nAcknowledgements\n\nInspired by and examples taken from The Narcissism of Small Code Differences.\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/an-experiment-in-code-redundancy/"
+    },{
+      
+      "image": "/assets/img/jsn.jpg",
+      "title": "JSON Madness in Play with Scala",
+      "date": "2013-12-13 00:00:00 +0700",
+      
+      "content": "The thing with typesafety is, that it gets in your way all the time, making  the simplest of things incredibly complicated. Still I remain convinced that it is the right thing to do, at least for now.\n\nSo this is post is dedicated towards getting started with JSON in Play 2.2 fast.\n\nSay you wanted to write some kind of REST service. What you probably have to do at some point is to send case classes over the wire. You would think that it can’t be too hard to do, especially when you did something similar in node.js without even thinking about it.\nTo be honest, after digging long enough and finding the right piece of documentation it’s actually pretty easy.\n\nFor a simple case class all you need is:\n\ncase class Contact(id: Option[String],\n                   name: String,\n                   username: String,\n                   date: Long = 0)\n\nobject Contact {\n  // note: severe scala madness going on in the background\n  implicit val format = Json.format[Contact]\n}\n\n\nThe important part here is in the companion object. It uses Scala macros to generated a bunch of boilerplate code at compile time.\n\nAlso note the type of the id, it’s Option[String]. This means that a contact can have an id or not. A missing id is common with REST when a new model gets POSTed to the server. Bottomline: Just make sure everything that might be missing is of type Option.\n\nWhat you want to know is, that after you’ve taken care of this you can serve Contact objects on HTTP requests by passing them directly to the toJson method:\n\ndef get = Action {\n  Ok(Json.toJson(Contact(...)))\n}\n\n\nSo far so good, but it gets a bit crazy when you want do something special like serving a list of two different types on a request:\n\ndef get = Action {\n  Ok(Json.toJson(\n    Seq(\n      Transaction(...),\n      Notification(...),\n      Transaction(...),\n      Notification(...),\n      Transaction(...)\n    )\n  ))\n}\n\n\nHere we want to serve a sequence of Transaction and Notification objects. Obviously we will need a common base type, otherwise the type checker infers something pretty unexpected…\n\ntrait ListEntry {\n  def id: Option[String]\n}\n\ncase class Notification(...) extends ListEntry\ncase class Transaction(...) extends ListEntry\n\n\nNote that both these case classes need an implicit formatter in their companion objects as well, as in the previous example.\n\nNow the compiler will still complain, because it can’t find an implicit formatter that will turn a ListEntry into a JsValue. The right place to define such a formatter is in the companion object of ListEntry:\n\nobject ListEntry {\n  implicit val writes = new Writes[ListEntry] {\n    def writes(c: ListEntry): JsValue = c match {\n      case t: Transaction =&gt; Transaction.format.writes(t)\n      case n: Notification =&gt; Notification.format.writes(n)\n    }\n  }\n}\n\n\nThis is obviously not the greatest solution in the world, but apparently it’s typesafe. What’s happening is that we find out the subtype of the ListEntry and then have its own formatter do the work. Done.\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/json-madness-in-play-with-scala/"
+    },{
+      
+      "image": "/assets/img/projects/kings@0,25x.png",
+      "title": "Responsive Web Apps with vw and vh",
+      "date": "2014-02-26 00:00:00 +0700",
+      "description": "When it coms to response web design media queries with fixed breakpoints are quite nice to adjust sites to different screen sizes. But what about font sizes?\n",
+      "content": "When it coms to response web design media queries with fixed breakpoints are quite nice to adjust sites to different screen sizes.\n\nBut what about font sizes?\n\nMany times they will change from one fixed size to another at a certain trigger point, as does this web site.\nThis makes sense of apps that change their layout at that point anyway.\nHowever I’d call that unnecessary micromanagement.\nEspecially for apps that have a strong focus on fonts, as it has been the case with my most recent UI for Kings (You can download it from Google Play).\n\n\n\nEnter vw and vh! These two CSS size units are 1/100th of the viewport width and height respectively.\nAll measures in this app are specified in either vw or vh. Here is a taste:\n\n.app h1 {\n  font-size: 9vw;\n  line-height: 10vw;\n  margin: 5vw 0;\n}\n\n\nIn fact it follows very strict rules that tend to work really well for this kind of (typography-heavy) UI:\n\nAs long as the width is greater than the height use vw. As soon as the height becomes greater than the the width use vh.\n\nThis is done via a media query:\n\n@media screen and (min-aspect-ratio: 1/1) {\n  .app h1 {\n    font-size: 9vh;\n    line-height: 10vh;\n    margin: 5vh 0;\n  }\n}\n\n\nNote that there is no visual break point as vw and vh are the same size when this media query “triggers”.\n\nUnfortunately vw and vh are not supported by every browser.\nHowever there is a neat code snippet by Roman Rudenko that simulates vw with rem and some JavaScript.\nrem uses the root element’s font size as a reference.\nSo 1rem is equal to the font size of the root element, 2rem double that and so on.\n\nHowever I needed to adjust the snipped a bit to take into account vh as well:\n\n(function (doc, win) {\n    var docEl = doc.documentElement;\n    var recalc = function () {\n\n      var mq = win.matchMedia(\"(min-aspect-ratio: 1/1)\");\n      var reference;\n\n      if (!mq.matches) {\n        reference = docEl.clientWidth;\n      } else {\n        reference = docEl.clientHeight;\n      }\n\n      docEl.style.fontSize = (reference/100) + 'px';\n      docEl.style.display = \"none\";\n      docEl.clientWidth; // Force relayout - important to new Androids\n      docEl.style.display = \"\";\n    };\n\n    if (!win.matchMedia) return;\n    if (!doc.addEventListener) return;\n\n    var hasSupportFor = function (unit) {\n      var div = doc.createElement('div');\n      div.setAttribute('style', 'font-size: 1' + unit);\n\n      return (div.style.fontSize == '1' + unit);\n    };\n\n    if (hasSupportFor(\"vw\") &amp;&amp; hasSupportFor(\"vh\")) return;\n    if (!hasSupportFor(\"rem\")) return;\n\n    win.addEventListener('resize', recalc, false);\n    recalc(); // make sure the DOM is loaded at this point.\n})(document, window);\n\n\nWhat this does is to make sure the font size of the root element is always set to 1/100th of either the view port width or height. This depends on the result of the media query.\n\nIn order for this to work we need to change our initial css to:\n\n.app h1 {\n  font-size: 27px;\n  font-size: 9rem;\n  font-size: 9vw;\n\n  line-height: 30px;\n  line-height: 10rem;\n  line-height: 10vw;\n\n  margin: 15px 0;\n  margin: 5rem 0;\n  margin: 5vw 0;\n}\n\n\nThis uses a simple fall back trick. Browsers that support vw/vh will simply override the previous statements. Browsers that don’t support vw/vh will ignore these statements.\n\nFor Browsers that support neither vw/vh nor rem I provide a rough pixel value. It turned out that a factor of 3 is ok for mobile phones but is to small for tablets. However it’s still readable and doesn’t break the layout.\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/responsive-web-apps-with-vw-and-vh/"
+    },{
+      
+      "image": "",
+      "title": "How to Find a Short Username",
+      "date": "2015-01-08 00:00:00 +0700",
+      
+      "content": "There are 11,881,376 five-letter combinations and I wanted one of them as my username.\n\nWhy five? Well, all of the two-, three- and four-letter ones are gone. Even with five, there are probably no combinations left that are also words in a dictionary. So finding a user name that is at least (semi-) pronounceable is as good as it can get.\n\nThe goal of the post is to document the process of me overcomplicating a simple matter and to showcase the tools that made it possible, so you can overcomplicate things too.\n\nCertainly the most important tool is the username checker at KnowEm, which allows to check the availability of a username across multiple sites.\nHowever, since availability on Twitter usually implies availability on most other services, filling out Twitter’s signup form is slightly faster.\n\nRandomness\n\nThe natural way to start is at random.org.\nIt offers a random string generator, that can generate up to 10,000 random five-letter strings at a time.\n\nThis is obviously the most naive approach and most of the results won’t be pronounceable, but at least is is relatively easy to find a combination that is available (as of early 2015).\n\nBasically I could have stopped there but having lots of tools available, doing something more advanced is was just too tempting.\n\nUNIX words\n\nIf you are using a UNIX-based operating system there is a file containing a lot of English words on your computer.\nIt’s located at either /usr/dict/words or /usr/share/dict/words.\n\nAs discussed earlier using dictionary words isn’t possible, but by applying a little transformation can turn them into something more likely to be available.\nThe transformation is to remove all the vowels from the word which leaves us with something that is still kind-of pronounceable while also having a higher chance of not being taken.\n\nAt first I’ve implemented this in JavaScript, but I realized that transforming data like this is a nice fit for Clojure.\nSince I’m still in the process of learning Clojure I thought this would be some good practice too.\nIn fact this was my first “real world” application of Clojure.\n\n(ns usrnames)\n\n(require '[clojure.string :as str])\n\n(def file (slurp \"/usr/share/dict/words\" :encoding \"ASCII\"))\n(def words (str/split-lines file))\n\n(defn remove-vowels [word]\n  (-&gt;&gt;\n    word\n    str/lower-case\n    (filter #(not= %1 \\a))\n    (filter #(not= %1 \\e))\n    (filter #(not= %1 \\i))\n    (filter #(not= %1 \\o))\n    (filter #(not= %1 \\u))\n    str/join))\n\n(-&gt;&gt;\n  words\n  (map remove-vowels)\n  (map vector words) ; zip with original\n  (filter (fn [[_ usrname]] (= 5 (count usrname))))\n  (group-by (fn [[_ usrname]] usrname))\n  (map (fn [[usrname group]]\n         (str usrname \" (\" (str/join \", \" (map first group)) \")\")))\n  (str/join \"\\n\")\n  (spit \"usrnames.txt\"))\n\n\nHere are 10 random results from this approach (you can look at all 35,102 resulting names here):\n\ntrtht (tritheite)\njwstn (Jewstone)\nhwkng (hawking)\nplrdr (Pleurodira, pleurodire)\ndrsnz (deresinize)\nnlwry (inlawry)\nnrckn (unreckon)\nbdlmc (Bedlamic)\nmrmps (Mormoops)\nclvry (Calvary, clovery)\n\n\nThe problem with the last approach is that words without vowels sound pretty leetspeak-ish and there’s also no good reason why a username should have no vowels in it.\n\nMarkov chains\n\nAnother way to generate pronounceable words is the use of Markov chains.\nA Markov chain is basically a probabilistic model for generating sequences.\nYou can “train” the model with a sample and then have it generate sequences that are “similar” to that sample.\n\nThe way it works is actually really simple:\nWe start with some letter x (not necessarily the letter x, x is a variable) and spin a roulette wheel that has 26 slices with the letters a through z on them.\nThe size of each slice is proportional to the number of times the letter on that slice appeared after x in the sample data.\nWhichever letter results from the spin becomes the new x and the process starts anew until we’ve picked five letters.\n\nHere is some Clojure that does the magic.\nIt is a modified version of the code outlined in this blog post.\n\n(ns markov-usrnames)\n\n(require '[clojure.string :as str])\n\n(def file (slurp \"/usr/share/dict/words\" :encoding \"ASCII\"))\n(def words (str/split-lines file))\n\n(defn generate-markov-nodes\n  [words]\n  (-&gt;&gt;\n    words\n    (map str/lower-case)\n    (str/join \\space)\n    (partition 2 1)\n    (reduce\n      (fn [acc [l next-l]] (update-in acc [l next-l] (fnil inc 0)))\n      {})))\n\n(defn wrand\n  \"given a vector of slice sizes, returns the index of a slice given a random\n  spin of a roulette wheel with compartments proportional to slices.\"\n  [slices]\n  (let [total (reduce + slices)\n        r (rand total)]\n    (loop [i 0 sum 0]\n      (if (&lt; r (+ (slices i) sum))\n        i\n        (recur (inc i) (+ (slices i) sum))))))\n\n(defn generate-usrname [nodes]\n  (loop [node (nodes \\space)\n         acc []]\n    (let [probabilities (vec (vals node))\n          index (wrand probabilities)\n          letter (nth (keys node) index)\n          next-node (nodes letter)]\n      (if (= 5 (count acc))\n        (str/join acc)\n        (if (= letter \\space)\n          (recur node acc)\n          (recur next-node (conj acc letter)))))))\n\n(def nodes (generate-markov-nodes words))\n\n(-&gt;&gt;\n  (repeatedly (partial generate-usrname nodes))\n  distinct\n  (take 10000)\n  (str/join \"\\n\")\n  (spit \"markov-usrnames.txt\"))\n\n\nThese are the first ten usernames generated by the above implementation:\n\njonin\nlluly\nsinda\ngafro\napera\nerenk\ndesio\nhyman\nwoqur\nflsmf\n\n\nLooks pretty good.\nUnfortunately they are so good, that all of them except flsmf were already taken.\nApparently too many people building Markov chains based on English dictionaries when signing up for Twitter… Obviously I needed to use a different dictionary!\n\nA Japanese text written in Latin alphabet, as suggested here, yields more Japanese sounding results:\n\nmekot\nnikin\noraus\nyayah\nsarik\nakuta\nnyena\nnomen\nnzuis\norita\n\n\nBut again nine out of ten were already taken (only nzuis was available).\n\nFurther down the rabbit hole\n\nAt this point I decided that maybe being pronounceable was more important than being short. So I increased my target length to six letters, which gives us a staggering 297,034,400 additional possibilities.\n\nThe next thing I did was to modify the Markov chain implementation to consider the last two letters instead of just one previous letter when spinning the roulette wheel. This should increase the quality of the results a little bit\n(for example it makes triple letters much more unlikely).\n\nHere are the modified functions:\n\n(defn generate-markov-nodes\n  [words]\n  (-&gt;&gt;\n    words\n    (map str/lower-case)\n    (str/join \"  \")\n    (partition 3 1)\n    (map #(list (take 2 %1) (nth %1 2)))\n    (reduce\n      (fn [acc [l next-l]] (update-in acc [l next-l] (fnil inc 0)))\n      {})))\n\n(defn generate-usrname [nodes]\n  (loop [node (nodes (list \\space \\space))\n         acc []]\n    (let [probabilities (vec (vals node))\n          index (wrand probabilities)\n          letter (nth (keys node) index)\n          next-node-key (list (or (last acc) \\space) letter)\n          next-node (nodes next-node-key)]\n      (if (= 6 (count acc))\n        (str/join acc)\n        (if (= 1 (count node))\n          (str/join acc)\n          (if (= letter \\space)\n            (recur node acc)\n            (recur next-node (conj acc letter))))))))\n\n\nLong story short, here are the first 10 results (based on Japanese text):\n\nkimaha\nnariya\nnisaki\ninakak\nosogir\nnokono\nbosiki\nnotoro\nnosiko\nutokok\n\n\nWhile this is certainly a cool fake word generator, it didn’t help me with my username, since I wasn’t able to find one that I liked and that was also available from the ones that I generated.\n\nWrap up\nAs you’ve probably guessed from the URL none of the generated usernames ultimately made it.\nAt some point I just concluded that my real name is as good as any, and without the vowels it’s even just six letters long.\n\nAnyway, what’s important is that I’ve spent a considerable amount of time doing something pretty useless,\nwhile playing with some cool tech and math. I might even have learned something.\n\n",
+      "categories": ["random"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/random/how-to-find-a-short-username/"
+    },{
+      
+      "image": "",
+      "title": "My Favorite Unit Test",
+      "date": "2015-04-06 00:00:00 +0700",
+      "description": "I use this one to find out if the test environment is set up correctly.\n",
+      "content": "I use this one to find out if the test environment is set up correctly:\n\ndescribe('the universe', () =&gt; {\n  it('should exist', () =&gt; {\n    expect(true).toBe(true);\n  });\n});\n\n\nIt’s also a software engineers version of Descartes’ “Cogito ergo sum”: The test passed, therefore the universe must exist.\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/my-favorite-unit-test/"
+    },{
+      
+      "image": "/assets/img/projects/wilson.svg",
+      "title": "Side Effects, Get Out of My Yard",
+      "date": "2016-02-21 00:00:00 +0700",
+      "description": "This post describes how to write re-frame middleware to replace side-effectful function calls with data.\n",
+      "content": "I’m currently working on a medium-sized ClojureScript web app. Since om.next is still in alpha, I opted for reagent/re-frame instead. Coming form React/Redux I felt right at home, especially since I ran into the same kind of problems, like where to perform HTTP requests (action creators!?) and how to do optimistic updates.\n\nPerforming HTTP request in the action creators (Redux) or the handlers (re-frame) just feels wrong. The “mistake” is even advocated in the re-frame wiki:\n\n(register-handler\n  :request-it             ;; &lt;-- the button dispatched this id\n  (fn\n    [db _]\n    ;; kick off the GET,\n    ;; making sure to supply a callback for success and failure\n    (GET \"http://json.my-endpoint.com/blah\"\n      {:handler       #(dispatch [:process-response %1]) ;; further dispatch !!\n       :error-handler #(dispatch [:bad-response %1])})   ;; further dispatch !!\n    ;; update a flag in `app-db` ... presumably to trigger UI changes\n    (assoc db :loading? true)))    ;; pure handlers must return a db\n\n\n(Fun fact: Note how it says “pure handler” in the comment, even though that’s a textbook example of an impure function)\n\nFrom a practical standpoint this makes the handler untestable without overwriting the GET function somehow, from a philosophical standpoint these are side effects which make the handler impure (which is, you know, “bad”).\n\nSince we’re already talking about religion, in Clojure we believe in data &gt; functions &gt; macros, so let’s do that. Currently we are using functions, so why don’t we return data from our handlers? In fact we are already doing that. We return a new state of the db, which will eventually lead to updates in the DOM. However, when it comes to other side effects we are left on our own1.\n\nLuckily re-frame lets us write middleware. Using middleware we can rewrite this example using just data:\n\n(register-handler\n  :request-it\n  [(enrich :db) http-driver] ;; (1)\n  (fn [db _]\n    {:db    (assoc db :loading? true) ;; (2)\n     :http  {:method            :get  ;; (3)\n             :url               \"http://json.my-endpoint.com/blah\"\n             :with-credentials? false\n             :meta              {:steps [[:process-response] ;; (4)\n                                         [:bad-response]]}}}))\n\n\nObviously we are now relying on the http-driver middleware (1) to perform the request for us.\nThe good thing is that this middleware can be written and tested independently by Somebody Else™ and conform to a contract. In fact the map in (3) is what you pass to the request function in cljs-http.\n\nWe are now returning data for two different side-effect backends: The db (2) and the http middleware (3). There could be more, like for writing to localStorage. Anyway, in order to interoperate with re-frame we need limit the scope to :db after we are done with the side-effects. This is what (enrich :db) (1) is for.\n\nIt’s not entirely true that the :http map is what you would pass to cljs-http, because there’s the additional :meta  field (4). This is for interoperability as well. The driver needs to know which value to dispatch when the response arrives.\nThe way the http-driver is written, it will conj the body of the response to the vector provided in :steps.\n\nThis is also how you would pass data to the follow-up handlers, which comes in handy for optimistic updates:\n\n(register-handler\n  :new-foo\n  [(path [:to :foos]) (enrich :db) http-driver trim-v]\n  (fn [foos [new-foo]]\n    (let [temp-id (gen-temp-id)]\n              ; optimistically add to the list and assign temp id\n      {:db    (conj foos (assoc new-foo :id temp-id))\n              ; perform POST request\n       :http  {:method            :post\n               :url               \"/foo\")\n               :transit-params    new-foo\n               :with-credentials? false\n                                  ; add the temp-id to the dispatch value\n               :meta              {:step [[:new-foo-success temp-id]\n                                          [:new-foo-failure temp-id]]}}})))\n(register-handler\n  :new-foo-success\n  [(path [:to :foos]) trim-v]\n  (fn [foos [temp-id new-foo]] ; body of the response get's conj'd to the end\n    ; replace the temp foo with the one returned from the server\n    (-&gt;&gt; foos (map #(if (= (:id %) temp-id) new-foo %)))))\n\n(register-handler\n  :new-foo-failure\n  [(path [:to :foos]) trim-v]\n  (fn [foos [temp-id error]]\n    ; remove the temp foo from the list\n    (-&gt;&gt; foos (remove #(= (:id %) temp-id)))))\n\n\n(Fun fact: This isn’t pure either, because gen-temp-id is non-deterministic)\n\nRemember how I said earlier that Somebody Else™ could write such a middleware, potentially as part of a library like redux-effects? Unfortunately that somebody isn’t me. Here is the implementation of the http-driver anyway. However, it lacks features like performing multiple requests or extracting an error object/message in the failure case:\n\n(defn http-driver\n  \"Middleware for re-frame that performs http requests.\"\n  [handler]\n  (fn [db v]\n    (let [{:keys [http] :as result} (handler db v)]\n      (when (some? http)\n        (go\n          (let [response               (&lt;! (request http))\n                {:keys [success body]} response\n                [success-s failure-s]  (get-in http [:meta :steps] [])]\n            (if success\n              (when success-s\n                (dispatch (conj success-s body)))\n              (when failure-s\n                (dispatch (conj failure-s response)))))))\n      result)))\n\n\nAcknowledgements\n\n  cycle.js\n  redux-effects\n\n\n\n  \n    \n      To me that’s a typical example of the domain-specificity of knowledge (as expressed by Nassim Taleb): We understand that data representing side-effects is easier to reason about when talking about the DOM (= React), but it’s not immediately apparent that you could do the same for other domains as well, for the same reasons. &#x21a9;&#xfe0e;\n    \n  \n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/side-effects-get-out-of-my-yard/"
+    },{
+      
+      "image": "",
+      "title": "A Simple CDA Implementation in Clojure",
+      "date": "2016-02-28 00:00:00 +0700",
+      "description": "This post describes a minimal Continuous Double Auction algorithm and provides an implementation in Clojure.\n",
+      "content": "I’ve just dug up some code I’ve written a couple of months ago. I basically wanted to implement a CDA algorithm, as used in most stock exchanges, in order to better understand the mechanism.\n\nNote that this algorithm deals with limit orders only and is only concerned with maintaining a consistent state of the bid and ask queues, not performing or keeping a log of the transactions.\n\n\nInception\nI’ve rewritten it a couple of times, mostly focusing around the idea of having to two different routines for buy and sell orders. The idea was to check if the order could be matched before adding it to any queue. This lead to a lot of conditionals (that I later tried to get rid of using protocols).\n\nEventually I realized that it could be done with a single routine, by just adding new orders to the front of either queue and have a separate routine that resolves the new, potentially invalid state of the system.\n\nThis routine doesn’t care if the new order was a buy or sell order, all it sees is an invalid state that needs to be resolved by matching orders until it is valid again. I find this approach much more elegant.\n\nThe algorithm basically does this:\n\n\n  Check if a trade is possible.\n    \n      No? Return queues as is.\n      Yes? Create a “diffed” order from the orders at the front of each queue (more about that later).\n      Is the diffed order zero, i.e. did the orders match perfectly?\n        \n          Yes? Return the queues.\n          No? Add the diffed order to the queues and start over.\n        \n      \n    \n  \n\n\nImplementation\nExpressed in Clojure, modeling the queues as a vector of 2 (sorted) lists:\n\n(defn place-order\n  \"Place a limit order using Continuous Double Auction.\"\n  [order queues]\n  (loop [[bids asks :as queues] (add-to-queues order queues)] ;; (1)\n    (let [[first-bid] bids\n          [first-ask] asks]\n      (if (not (trade-possible? first-bid first-ask))  ;; (2)\n        queues\n        (let [rest-queues  [(rest bids) (rest asks)]\n              diffed-order (diff-order first-bid first-ask)] ;; (3)\n          (if (nil? diffed-order)\n            rest-queues\n            (recur (add-to-front diffed-order rest-queues)))))))) ;; (4)\n\n\nAs you can see it maps pretty nicely to the abstract description of the algorithm.\n\n(1)\nLet’s take a look at add-to-queues. It uses a helper function insert-by, which inserts elements into a list maintaining an ordering. It’s basically insert from insertion sort. It could be replaced with something more performant.\n\nThe queues are sorted by price, but in different order. We want quick access to the highest bid and the lowest ask, so these go to the front of their respective list.\n\n(defn insert-by [f c e]\n  (let [[lt gt] (split-with #(f % e) c)]\n    (concat lt [e] gt)))\n\n(defn add-to-queues\n  \"Inserts an order into the matching queue, sorted by its price\n   and returns a new pair of queues.\"\n  [{:keys [quantity] :as order} [bids asks :as queues]]\n  (cond\n    (&gt; quantity 0) [(insert-by #(&gt; (:price %1) (:price %2)) bids order)\n                    asks]\n    (&lt; quantity 0) [bids\n                    (insert-by #(&lt; (:price %1) (:price %2)) asks order)]\n    :else queues))\n\n\n(2)\ntrade-possible? is straight-forward, though it is important to deal with empty queues, i.e. when either bid or ask is nil.\n\n(defn trade-possible?\n  \"Checks if a trade is possible based on the prices of two orders.\n   The bid price has to be higher than or equal to the ask price.\"\n  [bid ask]\n  (and\n    (some? bid)\n    (some? ask)\n    (&gt;= (:price bid) (:price ask))))\n\n\n(3)\n“Diffing” the orders is probably the core idea behind this algorithm.\ndiff-order takes two orders and returns a new order, which retains the price of the larger one, but is reduced by the quantity of the smaller one. In finance mumbo, it’s partially filling one order using the other.\n\nBy modeling sell orders with a negative quantity, we can simply add the two quantities together:\n\n(defn diff-order\n  \"Returns the 'difference' between two orders.\"\n  [bid ask]\n  ; using the fact that asks are modeled w/ a negative quantity:\n  (let [diff (+ (:quantity bid) (:quantity ask))]\n    (cond\n      (&gt; diff 0) (assoc bid :quantity diff)\n      (&lt; diff 0) (assoc ask :quantity diff)\n      :else nil)))\n\n\n(4)\nAt this point we’ve reached a valid state of the system again (assuming it was valid before the new order came in) but we also have a “new” order, the one returned by diff-order.\n\nThis is almost exactly the condition that we’ve started with, so we can recur. The difference is that we know that the diffed-order goes to the front of either queue, because that’s where it came from.\n\n(defn- add-to-front\n  \"Adds a new order to the front of the appropriate queue.\"\n  [order [bids asks :as queues]]\n  (cond\n    (&gt; (:quantity order) 0) [(cons order bids) asks]\n    (&lt; (:quantity order) 0) [bids (cons order asks)]\n    :else queues))\n\n\nYou can find the full code including basic tests in this gist.\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/a-simple-cda-implementation-in-clojure/"
+    },{
+      
+      "image": "",
+      "title": "How to Set Specific Probabilities Using the LMSR?",
+      "date": "2016-06-15 00:00:00 +0700",
+      "description": "How many shares do you need to buy/sell in the in a prediction market using the Logarithmic Market Scoring Rule (LMSR) to change the price/probability of an asset to a specific value?\n",
+      "content": "This post assumes knowledge about prediction markets and market scoring rules. I think the original paper by Robin Hanson provides a good introduction.\n\nThere are basically two approaches to buying/selling the right amount of shares to reach a certain probability. Method #1 is the sledgehammer approach, Method #2 is elegant, but tedious for more complicated price functions.\n\nMethod #1\nDoing some kind of binary search until the price is “close enough”. I’ve written some example code in Clojure:\n\n(defn set-to-prob [q i prob]\n  (loop [lower (magically-find-lower-bound q i prob)\n         upper (magically-find-upper-bound q i prob)]\n    (let [q_i'  (/ (+ upper lower) 2)\n          q'    (assoc q i q_i')\n          p'    (p i q')]\n      (if (close? 0.1 p' prob)\n        q'\n        (if (&gt; p' prob)\n          (recur lower q_i')\n          (recur q_i'  upper))))))\n\n\nOther than inelegance, this has the obvious flaw that it’s difficult to find reasonable upper and lower bounds for the number of outstanding shares.\n\nI used a simple implementation for the upper (lower) bound that added (subtracted) a multiple mmm of the liquidity parameter bbb, but it was always possible to force an infinite loop by using an input q⃗\\vec{q}q​ so that max⁡i,j∣qi−qj∣&gt;m b\\max_{i, j} \\vert q_i - q_j \\vert &gt; m \\, bmaxi,j​∣qi​−qj​∣&gt;mb.\n\nMethod #2\nIt’s possible to solve analytically for the number of shares qiq_iqi​ to move the price to a certain probability pip_ipi​.\n\nI’ve actually found the solution in this GitHub repository, but there was no hint as to how the solution was arrived at (maybe obvious when you have better math skills 🙁). However, eventually I was able to figure it out 😏.\nSo if you are like me and need to have every baby step laid out, here they are:\n\nWe know the price function for the LMSR is\n\npi(q⃗)=eqi/b∑jeqj/bp_i(\\vec{q}) = \\frac{e^{q_i/b}}{\\sum_j{e^{q_j/b}}}pi​(q​)=∑j​eqj​/beqi​/b​\n\nFor a specific price/probability pip_ipi​ for outcome iii, it must be the case that\n\npi=eqi/beqi/b+∑j≠ieqj/bp_i = \\frac{e^{q_i/b}}{e^{q_i/b} + \\sum_{j \\neq i}{e^{q_j/b}}}pi​=eqi​/b+∑j​=i​eqj​/beqi​/b​\n\nwhere ∑j≠i\\sum_{j \\neq i}∑j​=i​ iterates over all indices in q⃗\\vec{q}q​ except for iii.\n\nUsing some math magic:\n\npi(eqi/b+∑j≠ieqj/b)=eqi/bpi eqi/b+pi∑j≠ieqj/b=eqi/bpi∑j≠ieqj/b=eqi/b−pi eqi/bpi∑j≠ieqj/b=eqi/b(1−pi)pi1−pi∑j≠ieqj/b=eqi/blog⁡(pi1−pi∑j≠ieqj/b)=qib\\begin{aligned}\n  p_i \\left(e^{q_i/b} + \\sum_{j \\neq i}{e^{q_j/b}}\\right)           &amp;= e^{q_i/b} \\\\[2em]\n  p_i\\, e^{q_i/b} + p_i \\sum_{j \\neq i}{e^{q_j/b}}                  &amp;= e^{q_i/b} \\\\[2em]\n  p_i \\sum_{j \\neq i}{e^{q_j/b}}                                    &amp;= e^{q_i/b} - p_i\\, e^{q_i/b} \\\\[2em]\n  p_i \\sum_{j \\neq i}{e^{q_j/b}}                                    &amp;= e^{q_i/b}(1 - p_i) \\\\[2em]\n  \\frac{p_i}{1 - p_i} \\sum_{j \\neq i}{e^{q_j/b}}                    &amp;= e^{q_i/b} \\\\[2em]\n  \\log{\\left(\\frac{p_i}{1 - p_i} \\sum_{j \\neq i}{e^{q_j/b}}\\right)} &amp;= \\frac{q_i}b\n\\end{aligned}pi​⎝⎜⎛​eqi​/b+j​=i∑​eqj​/b⎠⎟⎞​pi​eqi​/b+pi​j​=i∑​eqj​/bpi​j​=i∑​eqj​/bpi​j​=i∑​eqj​/b1−pi​pi​​j​=i∑​eqj​/blog⎝⎜⎛​1−pi​pi​​j​=i∑​eqj​/b⎠⎟⎞​​=eqi​/b=eqi​/b=eqi​/b−pi​eqi​/b=eqi​/b(1−pi​)=eqi​/b=bqi​​​\n\nWhich finally leads to\n\nqi=b log⁡(pi1−pi∑j≠ieqj/b)q_i = b\\ \\log{\\left(\\frac{p_i}{1 - p_i} \\sum_{j \\neq i}{e^{q_j/b}}\\right)}qi​=b log⎝⎜⎛​1−pi​pi​​j​=i∑​eqj​/b⎠⎟⎞​\n\nwhich is the number of shares that element iii in the quantity vector q⃗\\vec{q}q​ needs to be changed to, in order for the price of contract iii to reach price pip_ipi​.\n\nFor the number of shares Δqi\\Delta q_iΔqi​ to buy/sell, the current amount of shares qi,tq_{i,t}qi,t​ needs to be subtracted Δqi=qi−qi,t\\Delta q_i = q_i - q_{i,t}Δqi​=qi​−qi,t​.\n\n\n\nNow somebody needs to do the same for the the liquidity-sensitive LMSR…\n\npi(q⃗)=αlog⁡(∑jeqj/b(q⃗))+∑jqj eqi/b(q⃗)−∑jqj eqj/b(q⃗)∑jqj∑jeqj/b(q⃗)p_i(\\vec{q}) = \\alpha \\log\\left({\\sum_j{e^{q_j/b(\\vec{q})}}}\\right) +\n               \\frac{\\sum_j{q_j \\, e^{q_i/b(\\vec{q})}} - \\sum_j{q_j \\, e^{q_j/b(\\vec{q})}}}\n                    {\\sum_j{q_j} \\sum_j{e^{q_j/b(\\vec{q})}}}pi​(q​)=αlog(j∑​eqj​/b(q​))+∑j​qj​∑j​eqj​/b(q​)∑j​qj​eqi​/b(q​)−∑j​qj​eqj​/b(q​)​\n\nwhere\n\nb(q⃗)=α∑jqjb(\\vec{q}) = \\alpha \\sum_j{q_j}b(q​)=αj∑​qj​\n\nHow hard can it be?\n\n",
+      "categories": ["finance"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/finance/how-to-set-specific-probabilities-using-the-lmsr/"
+    },{
+      
+      "image": "",
+      "title": "Learn ClojureScript in Y Minutes",
+      "date": "2016-07-05 00:00:00 +0700",
+      "description": "ClojureScript is a dialect of the Clojure language developed for JavaScript environments.  It has most of the functionality of Clojure with small adaptations owing to the differences in the underlying platform.\n",
+      "content": "ClojureScript is a dialect of the Clojure language developed for JavaScript environments. It has most of the functionality of Clojure with small adaptations owing to the differences in the underlying platform.\n\nAll you need is a ClojureScript REPL.\n\n; Comments start with semicolons.\n\n; ClojureScript is written in \"forms\", which are just\n; lists of things inside parentheses, separated by whitespace.\n;\n; The clojure reader assumes that the first thing is a\n; function or macro to call, and the rest are arguments.\n\n; The first call in a file should be ns, to set the namespace\n(ns learn.core)\n\n; More basic examples:\n\n; str will create a string out of all its arguments\n(str \"Hello\" \" \" \"World\") ; =&gt; \"Hello World\"\n\n; Math is straightforward\n(+ 1 1) ; =&gt; 2\n(- 2 1) ; =&gt; 1\n(* 2 2) ; =&gt; 4\n(/ 1 2) ; =&gt; 0.5 (in Clojure, this would return `1/2`)\n\n; Equality is =\n(= 1 1) ; =&gt; true\n(= 2 1) ; =&gt; false\n\n; You need not for logic, too\n(not true) ; =&gt; false\n\n; Nesting forms works as you expect\n(+ 1 (- 3 2)) ; = 1 + (3 - 2) =&gt; 2\n\n; Types\n;;;;;;;;;;;;;\n\n; ClojureScript uses JavaScript's types for booleans, strings and numbers.\n; Use `type` to inspect them.\n(type 1) ; =&gt; #object[Number \"function Number() { [native code] }\"]\n(type 1.) ; Same as above, no distinction between int and double\n(type \"\") ; Strings always double-quoted\n(type false) ; =&gt; #object[Boolean \"function Boolean() { [native code] }\"]\n(type nil) ; The \"null\" value is called nil\n\n; If you want to create a literal list of data, use ' to stop it from\n; being evaluated\n'(+ 1 2) ; =&gt; (+ 1 2)\n; (shorthand for (quote (+ 1 2)))\n\n; Collections &amp; Sequences\n;;;;;;;;;;;;;;;;;;;\n\n; Lists are linked-list data structures, while Vectors are array-backed.\n(type [1 2 3]); =&gt; cljs.core/PersistentVector\n(type '(1 2 3)); =&gt; cljs.core/List\n\n; A list would be written as just (1 2 3), but we have to quote\n; it to stop the reader thinking it's a function.\n; Also, (list 1 2 3) is the same as '(1 2 3)\n\n; \"Collections\" are just groups of data\n; Both lists and vectors are collections:\n(coll? '(1 2 3)) ; =&gt; true\n(coll? [1 2 3]) ; =&gt; true\n\n; \"Sequences\" (seqs) are abstract descriptions of lists of data.\n; Only lists are seqs.\n(seq? '(1 2 3)) ; =&gt; true\n(seq? [1 2 3]) ; =&gt; false\n\n; A seq need only provide an entry when it is accessed.\n; So, seqs which can be lazy -- they can define infinite series:\n(range 4) ; =&gt; (0 1 2 3)\n(range) ; =&gt; (0 1 2 3 4 ...) (an infinite series, don't evaluate!)\n(take 4 (range)) ;  (0 1 2 3)\n\n; Use cons to add an item to the beginning of a list or vector\n(cons 4 [1 2 3]) ; =&gt; (4 1 2 3)\n(cons 4 '(1 2 3)) ; =&gt; (4 1 2 3)\n\n; Conj will add an item to a collection in the most efficient way.\n; For lists, they insert at the beginning. For vectors, they insert at the end.\n(conj [1 2 3] 4) ; =&gt; [1 2 3 4]\n(conj '(1 2 3) 4) ; =&gt; (4 1 2 3)\n\n; Use concat to add lists or vectors together\n(concat [1 2] '(3 4)) ; =&gt; (1 2 3 4)\n\n; Use filter, map to interact with collections\n(map inc [1 2 3]) ; =&gt; (2 3 4)\n(filter even? [1 2 3]) ; =&gt; (2)\n\n; Use reduce to reduce them\n(reduce + [1 2 3 4])\n; = (+ (+ (+ 1 2) 3) 4)\n; =&gt; 10\n\n; Reduce can take an initial-value argument too\n(reduce conj [] '(3 2 1))\n; = (conj (conj (conj [] 3) 2) 1)\n; =&gt; [3 2 1]\n\n; Functions\n;;;;;;;;;;;;;;;;;;;;;\n\n; Use fn to create new functions. A function always returns\n; its last statement.\n(fn [] \"Hello World\") ; =&gt; fn\n\n; (You need extra parens to call it)\n((fn [] \"Hello World\")) ; =&gt; \"Hello World\"\n\n; You can create a var using def\n(def x 1)\nx ; =&gt; 1\n\n; Assign a function to a var\n(def hello-world (fn [] \"Hello World\"))\n(hello-world) ; =&gt; \"Hello World\"\n\n; You can shorten this process by using defn\n(defn hello-world [] \"Hello World\")\n\n; The [] is the list of arguments for the function.\n(defn hello [name]\n  (str \"Hello \" name))\n(hello \"Steve\") ; =&gt; \"Hello Steve\"\n\n; You can also use this shorthand to create functions:\n(def hello2 #(str \"Hello \" %1))\n(hello2 \"Fanny\") ; =&gt; \"Hello Fanny\"\n\n; You can have multi-variadic functions, too\n(defn hello3\n  ([] \"Hello World\")\n  ([name] (str \"Hello \" name)))\n(hello3 \"Jake\") ; =&gt; \"Hello Jake\"\n(hello3) ; =&gt; \"Hello World\"\n\n; Functions can pack extra arguments up in a seq for you\n(defn count-args [&amp; args]\n  (str \"You passed \" (count args) \" args: \" args))\n(count-args 1 2 3) ; =&gt; \"You passed 3 args: (1 2 3)\"\n\n; You can mix regular and packed arguments\n(defn hello-count [name &amp; args]\n  (str \"Hello \" name \", you passed \" (count args) \" extra args\"))\n(hello-count \"Finn\" 1 2 3)\n; =&gt; \"Hello Finn, you passed 3 extra args\"\n\n\n; Maps\n;;;;;;;;;;\n\n; Hash maps and array maps share an interface. Hash maps have faster lookups\n; but don't retain key order.\n(type {:a 1 :b 2 :c 3}) ; =&gt; cljs.core/PersistentArrayMap\n(type (hash-map :a 1 :b 2 :c 3)) ; =&gt; cljs.core/PersistentHashMap\n\n; Arraymaps will automatically become hashmaps through most operations\n; if they get big enough, so you don't need to worry.\n\n; Maps can use any hashable type as a key, but usually keywords are best\n; Keywords are like strings with some efficiency bonuses\n(type :a) ; =&gt; cljs.core/Keyword\n\n(def stringmap {\"a\" 1, \"b\" 2, \"c\" 3})\nstringmap  ; =&gt; {\"a\" 1, \"b\" 2, \"c\" 3}\n\n(def keymap {:a 1, :b 2, :c 3})\nkeymap ; =&gt; {:a 1, :c 3, :b 2}\n\n; By the way, commas are always treated as whitespace and do nothing.\n\n; Retrieve a value from a map by calling it as a function\n(stringmap \"a\") ; =&gt; 1\n(keymap :a) ; =&gt; 1\n\n; Keywords can be used to retrieve their value from a map, too!\n(:b keymap) ; =&gt; 2\n\n; Don't try this with strings.\n;(\"a\" stringmap)\n; =&gt; #object[TypeError TypeError: \"a\".call is not a function]\n\n; Retrieving a non-present key returns nil\n(stringmap \"d\") ; =&gt; nil\n\n; Use assoc to add new keys to hash-maps\n(def newkeymap (assoc keymap :d 4))\nnewkeymap ; =&gt; {:a 1, :b 2, :c 3, :d 4}\n\n; But remember, clojure types are immutable!\nkeymap ; =&gt; {:a 1, :b 2, :c 3}\n\n; Use dissoc to remove keys\n(dissoc keymap :a :b) ; =&gt; {:c 3}\n\n; Sets\n;;;;;;\n\n(type #{1 2 3}) ; =&gt; cljs.core/PersistentHashSet\n(set [1 2 3 1 2 3 3 2 1 3 2 1]) ; =&gt; #{1 2 3}\n\n; Add a member with conj\n(conj #{1 2 3} 4) ; =&gt; #{1 2 3 4}\n\n; Remove one with disj\n(disj #{1 2 3} 1) ; =&gt; #{2 3}\n\n; Test for existence by using the set as a function:\n(#{1 2 3} 1) ; =&gt; 1\n(#{1 2 3} 4) ; =&gt; nil\n\n; There are more functions in the clojure.sets namespace.\n\n; Useful forms\n;;;;;;;;;;;;;;;;;\n\n; Logic constructs in clojure are just macros, and look like\n; everything else\n(if false \"a\" \"b\") ; =&gt; \"b\"\n(if false \"a\") ; =&gt; nil\n\n; Use let to create temporary bindings\n(let [a 1 b 2]\n  (&gt; a b)) ; =&gt; false\n\n; Group statements together with do\n(do\n  (print \"Hello\")\n  \"World\") ; =&gt; \"World\" (prints \"Hello\")\n\n; Functions have an implicit do\n(defn print-and-say-hello [name]\n  (print \"Saying hello to \" name)\n  (str \"Hello \" name))\n(print-and-say-hello \"Jeff\") ;=&gt; \"Hello Jeff\" (prints \"Saying hello to Jeff\")\n\n; So does let\n(let [name \"Urkel\"]\n  (print \"Saying hello to \" name)\n  (str \"Hello \" name)) ; =&gt; \"Hello Urkel\" (prints \"Saying hello to Urkel\")\n\n\n; Use the threading macros (-&gt; and -&gt;&gt;) to express transformations of\n; data more clearly.\n\n; The \"Thread-first\" macro (-&gt;) inserts into each form the result of\n; the previous, as the first argument (second item)\n(-&gt;  \n   {:a 1 :b 2}\n   (assoc :c 3) ;=&gt; (assoc {:a 1 :b 2} :c 3)\n   (dissoc :b)) ;=&gt; (dissoc (assoc {:a 1 :b 2} :c 3) :b)\n\n; This expression could be written as:\n; (dissoc (assoc {:a 1 :b 2} :c 3) :b)\n; and evaluates to {:a 1 :c 3}\n\n; The double arrow does the same thing, but inserts the result of\n; each line at the *end* of the form. This is useful for collection\n; operations in particular:\n(-&gt;&gt;\n   (range 10)\n   (map inc)     ;=&gt; (map inc (range 10)\n   (filter odd?) ;=&gt; (filter odd? (map inc (range 10))\n   (into []))    ;=&gt; (into [] (filter odd? (map inc (range 10)))\n                 ; Result: [1 3 5 7 9]\n\n; Modules\n;;;;;;;;;;;;;;;\n\n; Use require to import a module\n(require 'clojure.string)\n\n; Use / to call functions from a module\n; Here, the module is clojure.string and the function is blank?\n(clojure.string/blank? \"\") ; =&gt; true\n\n; You can give a module a shorter name on import\n(require '[clojure.string :as str])\n(str/replace \"This is a test.\" #\"[a-o]\" str/upper-case) ; =&gt; \"THIs Is A tEst.\"\n; (#\"\" denotes a regular expression literal)\n\n; You can choose a subset of functions to import, too\n(require '[clojure.set :refer [intersection]])\n\n; Now you can use `intersection` directly\n(intersection #{1 2 3} #{2 3 4}) ; =&gt; #{2 3}\n\n; You can use require from a namespace using :require.\n; You don't need to quote your modules if you do it this way.\n(ns test.core\n  (:require [clojure.string :as str]\n            [clojure.set :as set]))\n\n; JavaScript\n;;;;;;;;;;;;;;;;;\n\n; JavaScript has a huge and ecosystem, so\n; you'll want to learn how to get at it.\n\n; Prefix with `js/` and use the class name with a `.` at the end\n; to make a new instance. Or use `new`\n(js/Date.) ; JS: new Date()\n(new js/Date) ; JS: new Date()\n\n; Use `.` to call methods.\n; Or, use the `.method` shortcut\n(. (js/Date.) getTime) ; &lt;a timestamp&gt;\n(.getTime (js/Date.)) ; exactly the same thing.\n\n; You can access properties via `.` as well.\n; Or use the `.-property` shortcut\n(. js/Math -PI) ; JS: Math.PI\n(.-PI js/Math) ; JS: Math.PI\n\n; You can access properties and call functions in nested objects via `..`\n(.. js/self -Math -PI) ; JS: self.Math.PI\n(.. js/self -Math (pow 10 2)) ; JS: self.Math.pow(10, 2)\n\n; For methods you can use the `.method` shortcut, again\n(.Math.pow js/self 10 2) ; JS: self.Math.pow(10, 2)\n\n; You can tag a clojure map literal with `#js` to turn it into json\n; Don't forget the inner `#js` tag!\n#js {:a 1 :n #js {:b 2 :c 3}} ; JS: {\"a\": 1, \"n\": {\"b\": 2, \"c\": 3}}\n\n; For symbolic references use `clj-&gt;js`\n(def dat {:a 1 :n {:b 2 :c 3}})\n(clj-&gt;js dat) ; JS:  {\"a\": 1, \"n\": {\"b\": 2, \"c\": 3}}\n\n; To turn json into clojure data structures, use `js-&gt;clj`\n(def jsdat (clj-&gt;js dat))\n(js-&gt;clj jsdat) ; =&gt; {\"a\" 1, \"n\" {\"b\" 2, \"c\" 3}}\n(js-&gt;clj jsdat :keywordize-keys true) ; =&gt; {:a 1, :n {:b 2, :c 3}}\n\n; You can set properties on a js object via `set!`\n; Note that cljs functions are also js functions\n\n(set! (.-onclick js/document) (fn [e] (.log js/console e)))\n; JS: document.onclick = function(e) { console.log(e) }\n\n(set! (.. js/self -document -onclick) #(.log js/console %))\n; JS: self.document.onclick = function(e) { console.log(e) }\n\n; STM\n;;;;;;;;;;;;;;;;;\n\n; Software Transactional Memory is the mechanism clojure uses to handle\n; persistent state. There are a few constructs in clojure that use this.\n\n; An atom is the simplest. Pass it an initial value\n(def my-atom (atom {}))\n\n; Update an atom with swap!.\n; swap! takes a function and calls it with the current value of the atom\n; as the first argument, and any trailing arguments as the second\n(swap! my-atom assoc :a 1) ; Sets my-atom to the result of (assoc {} :a 1)\n(swap! my-atom assoc :b 2) ; Sets my-atom to the result of (assoc {:a 1} :b 2)\n\n; Use '@' to dereference the atom and get the value\nmy-atom  ;=&gt; Atom&lt;#...&gt; (Returns the Atom object)\n@my-atom ; =&gt; {:a 1 :b 2}\n\n; Here's a simple counter using an atom\n(def counter (atom 0))\n(defn inc-counter []\n  (swap! counter inc))\n\n(inc-counter)\n(inc-counter)\n(inc-counter)\n(inc-counter)\n(inc-counter)\n\n@counter ; =&gt; 5\n\n; Other STM constructs are refs and agents.\n; Refs: http://clojure.org/refs\n; Agents: http://clojure.org/agents\n\n\nFurther Reading\n\nThis is far from exhaustive, but hopefully it’s enough to get you on your feet.\n\nClojureScript Project Home:\nhttps://github.com/clojure/clojurescript\n\nMy Screencasts on YouTube:\nhttps://www.youtube.com/playlist?list=PLJUDspZJoglqlVb4PZ-zktOaQrUlQxi8H\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/learn-clojurescript-in-y-minutes/"
+    },{
+      
+      "image": "",
+      "title": "What I’ve Learned From Trying to Register 😂😂😂.io",
+      "date": "2016-08-25 00:00:00 +0700",
+      "description": "tl;dr: Nothing too interesting. What follows is a collection of emoji related links, starting with an episode of the a16z podcast.\n",
+      "content": "It started with the realization that you could bring up an emoji keyboard on any Mac by pressing ⌃⌘␣ (ctrl+cmd+space):\n\nInsert #emojis on #macos on any input field via ⌃⌘␣ (ctrl+cmd+space). You&#39;re welcome 😏 pic.twitter.com/OeFGewEgVD&mdash; Florian Klampfer (@qwtel) August 25, 2016\n\n\n\n\nNext thing I know, I’m on &lt;popular name register&gt; trying to buy 😂😂😂, which in 2028 will be the most common combination of characters entered into VR-brainwave-contact-lens browsers, or whatever people in the future will use to read hypertext (cf. Lindy effect).\nAccording to emojitracker.com it is already the most popular emoji today.\n\nI got quite excited when I saw that the .io top-level domain was still available.\nUnfortunately, one hour, two CSRs and three failed orders later I had to realize that it was a bug in the UI and that it wasn’t actually available or even purchasable.\n\nGenerally, emoji domains are possible, but only on certain top-level domains that allow it, .ws being the most popular one.\nWhile emojis are part of the UTF-8 charset, the DNS only allows a subset of ASCII.\nHowever, using a representation called “Punycode”, UTF-8 characters can be brought to and from that subset. For example “點看” becomes xn--c1yn36f.\nUnfortunately, that doesn’t mean any valid punycode can be registered. The feature is intended to make language-specific domains possible, which emojis, well, aren’t.\n\nEmoji URLs aren’t too useful either, as some sites don’t know how to link them correctly, a tiny site called Facebook being one one of them 😈.\nThis means the viral traffic I was hoping to get from 😂😂😂.io for my emoji-only chat app — that has yet to be built — wasn’t going to happen anyway 😉.\nAlso, others have tried that before.\n\nAnyway, the easiest way to get an emoji URL is through a site called linkmoji (http://🍕💩.ws) which is like bit.ly, except with emojis.\nFor example, this blog post is reachable via http://🍔🐢🔑🌲🐡🐒🍛🐈.🍕💩.ws.\n",
+      "categories": ["random"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/random/what-ive-learned-from-trying-to-register-xn-g28haa-io/"
+    },{
+      
+      "image": "/assets/img/fotg-wild.png",
+      "title": "Taming the Font of the Gods",
+      "date": "2016-08-28 00:00:00 +0700",
+      "description": "Legend has it that the Font of the Gods could be used for coding, but so far no one has been able to wield its power due to the ferocity of its letter spacing.\n",
+      "content": "Legend has it that the Font of the Gods could be used for coding, but so far no one has been able to wield its power due to the ferocity of its letter spacing:\n\n\n\nHowever, one brave hero took it upon him to take it to the Forge of Fonts and apply the magic formula, so he could use it as a weapon and inflict horror on his enemies…\n\n\n\nBut beware! As one of the most important philosophers of our time once said:\nWith great power comes great responsibility:\n\n\n\n\n\n\n\n",
+      "categories": ["random"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/random/taming-the-font-of-the-gods/"
+    },{
+      
+      "image": "",
+      "title": "Good, Bad and Ugly WebComponents",
+      "date": "2016-10-12 00:00:00 +0700",
+      "description": "Container and collection components. How do they receive items? Do they receive items? Let’s find out!\n",
+      "content": "Many times when building user interfaces one comes across container elements, i.e. elements that take a collection of items and display them.\n\nThere are different ways to tell the container which items to render.\n\nTraditionally, a template engine would render them inside a for-each construct.\nIn React one would pass a collection via an “attribute” (e.g. &lt;MyList items={items} /&gt;), and let the component figure out how to render its items.\n\nWith WebComponents there are a number of ways to approach this situation.\n\nUgly\naka “super bad”\n\nStringifying complex data and passing it via attribute.\n\n&lt;my-list\n  a-attribute-type\n  items='[\n    {\"id\": 0, \"name\": \"Item 1\", \"img\": \"//...\", \"text\": \"...\"},\n    {\"id\": 1, \"name\": \"Item 2\", \"img\": \"//...\", \"text\": \"...\"}\n  ]'&gt;\n&lt;/my-list&gt;\n\n\nNeedless to say, this is not a good idea. It looks similar to the React approach but really isn’t.\n\nBad\naka “situational”\n\nProgrammatically setting the content:\n\n&lt;my-list id=\"list\" a-attribute-type&gt;&lt;/my-list&gt;\n\n&lt;script&gt;\n  list\n    .setItems([\n      {id: 0, name: 'Item 1', img: '//...', text: '...'},\n      {id: 1, name: 'Item 2', img: '//...', text: '...'},\n    ])\n    .render();\n&lt;/script&gt;\n\n\nThis approach is suitable for web apps which can’t or won’t to be be interpreted in terms of web pages.\n\nGood\nProgressively enhance content, as god intended:\n\n&lt;my-list a-attribute-type&gt;\n  &lt;my-list-item item-id=\"0\" some-attribute&gt;\n    &lt;h3 slot=\"name\"&gt;Item 1&lt;/h3&gt;\n    &lt;img slot=\"img\" src=\"//...\" /&gt;\n    &lt;p slot=\"text\"&gt;...&lt;/p&gt;\n  &lt;/my-list-item&gt;\n  &lt;my-list-item item-id=\"1\" some-attribute&gt;\n    &lt;h3 slot=\"name\"&gt;Item 2&lt;/h3&gt;\n    &lt;img slot=\"img\" src=\"//...\" /&gt;\n    &lt;p slot=\"text\"&gt;...&lt;/p&gt;\n  &lt;/my-list-item&gt;\n&lt;/my-list&gt;\n\n\nThis\n\n\n  maintains semantics\n  makes content available before JS is loaded / when disabled\n  makes content consumable without a webcomponents polyfill\n  is in line with how native components like &lt;select/&gt; work\n\n\nHowever, it does not encapsulate the rendering of the items like a React component would do.\nThis is why the more common approach will be:\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/good-bad-and-ugly-webcomponents/"
+    },{
+      
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Compound_Interest_with_Varying_Frequencies.svg",
+      "title": "Continuously Compounding Interest",
+      "date": "2018-01-30 00:00:00 +0700",
+      "description": "How to calculate the continuously compounded interest rate, which is equivalent to a given (nominal) annual interest rate?\n",
+      "content": "I’ve found the above hard to google (maybe these are not the correct finance terms),\nso I’ve decided to add my own entry on the subject.\nIn chase you just want the answer, here it is:\n\nrc=log⁡(1+ra)r_c = \\log{\\left(1 + r_a\\right)}rc​=log(1+ra​)\n\nTo find out why this is true, and how it would work for different compounding periods, read on.\n\n\n\nThe formula for compound interest (that you find on the web) is:\n\nWt=W0 (1+rn)ntW_t = W_0\\,\\left(1 + \\frac{r}{n}\\right)^{nt}Wt​=W0​(1+nr​)nt\n\nwhere W0W_0W0​ is the initial wealth, WtW_tWt​ is the wealth after ttt years, rrr is the nominal annual interest rate, and nnn is the number of compounding periods per year.\n\nAs we vary the number of compounding periods, we notice that we get a higher return as the number goes up.\nNote that this is the case even though we divide the interest rate rrr by the number of compounding periods nnn.\n\n\nThe effect of compound interest, with an initial investment of $1,000 and 20% annual interest, compounded at various frequencies.\nSource. Licensed under CC-BY-SA-3.0\n\nSince we’ve noticed that we get more money as we increase the number of compounding periods,\nwe might be interested in what happens when we grant ourselves infinitely many compounding periods.\nContrary to what you might think, we don’t get infinite money.\n\nWe can figure it out by letting nnn approach infinity.\n\nWt=lim⁡n→∞W0(1+rn)ntW_t = \\lim_{n \\to \\infty} W_0 \\left(1 + \\frac{r}{n}\\right)^{nt}Wt​=n→∞lim​W0​(1+nr​)nt\n\nIf we set m≔nrm \\coloneqq \\frac{n}{r}m:=rn​, we get\n\nWt=lim⁡m→∞W0(1+1m)mrt=W0[lim⁡m→∞(1+1m)m]rt\\begin{aligned}\nW_t &amp;= \\lim_{m \\to \\infty} W_0 \\left(1 + \\frac{1}{m}\\right)^{mrt} \\\\[1em]\n    &amp;= W_0\\left[\\lim_{m \\to \\infty} \\left(1 + \\frac{1}{m}\\right)^m\\right]^{rt}\n\\end{aligned}Wt​​=m→∞lim​W0​(1+m1​)mrt=W0​[m→∞lim​(1+m1​)m]rt​\n\nSince we know that (1+1n)n\\left(1 + \\frac{1}{n}\\right)^n(1+n1​)n converges to eee, we get\n\nWt=W0 ertW_t = W_0\\,e^{rt}Wt​=W0​ert\n\nThis corresponds to the purple line in the chart above.\nAs you can see, it results in the highest growth for the given interest rate.\n\nNow, we might be interested in the rate, which when compounded continuously, would result in the same growth as annual compounding, but smoothly distributed throughout the year.\nIn the graph, this would correspond to a continuous line that touches every left corner of the annual line (green).\n\nThe continuously compounded rate rcr_crc​ for this curve would be slightly lower than the corresponding annual interest rate rar_ara​.\nBut by how much?\n\nWe already have the formulas for discrete and periodic compounding, so we can equate them and solve for rcr_crc​:\n\nW0 erct=W0(1+ran)ntlog⁡erct=log⁡(1+ran)ntrct=nt log⁡(1+ran)rc=n log⁡(1+ran)\\begin{aligned}\n  W_0\\,e^{r_c t}  &amp;= W_0\\left(1 + \\frac{r_a}{n}\\right)^{nt}    \\\\[1em]\n  \\log{e^{r_c t}} &amp;= \\log{\\left(1 + \\frac{r_a}{n}\\right)^{nt}} \\\\[1em]\n  r_c t           &amp;= nt\\,\\log{\\left(1 + \\frac{r_a}{n}\\right)}  \\\\[1em]\n  r_c             &amp;= n \\,\\log{\\left(1 + \\frac{r_a}{n}\\right)}\n\\end{aligned}W0​erc​tlogerc​trc​trc​​=W0​(1+nra​​)nt=log(1+nra​​)nt=ntlog(1+nra​​)=nlog(1+nra​​)​\n\nSince n=1n = 1n=1 when compounding once per year, we get\n\nrc=log⁡(1+ra)r_c = \\log{\\left(1 + r_a\\right)}rc​=log(1+ra​)\n\nwhich is equal to the statement in the introduction.\n\nConversely, we can derive a formula to calculate nominal interest rates for different compounding periods, given the continuously compounded interest rate:\n\nra=erc−1nnr_a = \\frac{\\sqrt[n]{e^{r_c} - 1}}{n}ra​=nnerc​−1​​\n\nor in the case of n=1n = 1n=1,\n\nra=erc−1r_a = e^{r_c} - 1ra​=erc​−1\n\n",
+      "categories": ["finance"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/finance/continuously-compounding-interest/"
+    },{
+      
+      "image": "",
+      "title": "How to Include Certain Files Only in Tagged Commits",
+      "date": "2018-04-06 00:00:00 +0700",
+      "description": "Certain situations and tools require that we check-in build artifacts into a git repository, maybe even on the master branch. This is bad practice for a variety of reasons, but sometimes we can’t avoid it.\n",
+      "content": "Certain situations and tools (cough, bower, cough) require that we check-in build artifacts into a git repository, maybe even on the master branch. This is bad practice for a variety of reasons, but sometimes we can’t avoid it.\n\nHowever, we can hack our way around cluttering the history too much, using a few quick-and-dirty npm scripts.\n\nFor this post we assume that we want to check-in the dist folder only on tagged commits,\nwhich we create with the npm version command.\n\nFirst, we add /dist to our .gitignore file, which tells git to ignore the top-level dist folder.\n\nIn package.json we add the following scripts:\n\n{\n  \"scripts\": {\n    \"preversion\": \"sed -i '' 's:/dist:#/dist:' .gitignore\",\n    \"version\": \"npm run build &amp;&amp; git add .\",\n    \"postversion\": \"sed -i '' 's:#/dist:/dist:' .gitignore &amp;&amp; git rm --cached -r dist &amp;&amp; git add . &amp;&amp; git commit -m 'restore pre-version .gitignore'\"\n  }\n}\n\n\nThe sed command allows us to run a quick regex search-and-replace on a file.1\nI used : as a delimiter (instead of /) to make writing regexes that involve file paths easier.\n\nThe first regex looks for the dist entry and replaces it with something we can find later (we prepend a # so the file remains a valid .gitignore). The second regex does the reverse.\n\nThe execution order is as follows:\n\n\n  npm runs the preversion script. We remove the dist entry from .gitignore.2\n  npm bumps the version number and runs the version script. We build the project and add the files to git.\n  npm commits the files and tags the release, then runs the postversion script.\nWe add the dist entry back to .gitignore and remove the build files from git in a follow-up commit.\n\n\nThe git history for every tagged release will look like this:\n\n* ac58cf4 2018-04-06 | restore pre-version .gitignore (HEAD -&gt; master)\n* a8989f1 2018-04-06 | 1.2.3 (tag: v1.2.3)\n\n\nThis procedure still adds a lot of clutter to to the git history, but at least it is limited to tagged commits, and we aren’t at risk of checking in (development-) artifacts by accident.\n\n\n  \n    \n      BSD sed requires a file extension after the -i flag because it saves a backup file with the given extension (Source). Since .gitignore doesn’t have one, we provide the empty string. &#x21a9;&#xfe0e;\n    \n    \n      Technically you could also prepend this to the verison script. Using all three version hooks makes it a bit more readable. &#x21a9;&#xfe0e;\n    \n  \n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/how-to-include-certain-files-only-in-tagged-commits/"
+    },{
+      
+      "image": "/assets/img/github-url.png",
+      "title": "URLs are Directories",
+      "date": "2018-06-09 00:00:00 +0700",
+      "description": "Just a friendly reminder that URL paths are directories.\n",
+      "content": "Just a friendly reminder that URL paths are directories.\nWhen you have an URL pathname that looks like /user/item/4, there’s an implicit understanding that /user and /user/item are also valid URLs.\nThe underlying folder structure looks like this:\n\n└── user\n    └── item\n        ├── 1\n        ├── 2\n        ├── 3\n        └── 4\n\n\nIf you don’t want to create extra index pages, use - instead. E.g. user-item-4. There is nothing inherently better about using / instead of -, but the later comes without the implicit suggestions that there is an underlying folder.\n\n├── user-item-1\n├── user-item-2\n├── user-item-3\n└── user-item-4\n\n\nThis may not matter for consumer-facing sites, but there’s plenty of developer sites that get this wrong, too:\n\n\n  \n    GitHub will give you URLs like /qwtel/hydejack/tree/v8, but /qwtel/hydejack/tree doesn’t exist.\n\n    └── qwtel\n    └── hydejack\n        └── tree   # THIS FOLDER DOES NOT EXIST\n            └── v8 # WE PUT THINGS IN IT ANYWAY\n    \n\n    \n\n    Uhm, actually, this is the page I am looking for…\n  \n  \n    npm will give you organization-namespaced package URLs like /package/@platformparity/streams, but the organization pages don’t exist.\n\n    For some extra fun try /package, which — instead of returning a list of all packages — will redirect to /package/package 🙄\n\n    └── package             # symbolic link\n    ├── package         # with folders in it\n    └── @platformparity # some of which don't exist\n        └── streams     # but have stuff inside anyway 🤷‍♂️\n    \n\n    \n\n    Now this is not the web page I am looking for.\n  \n  \n    Jekyll’s default permalink structure looks like /2018/06/06/urls-are-directories, but no pages for /2018, 2018/06, and /2018/06/06 are created. The proper URL is /2018-06-06-urls-are-directories\n  \n\n\nTo recap: / has a special meaning in path names, while - does not. When you need to visually separate parts of your URL, but have no plans of introducing extra index pages, use -.\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/urls-are-directories/"
+    },{
+      
+      "image": "/assets/img/Fessenden_synchronous_spark_transmitter.jpg",
+      "title": "Async Generators in the Wild",
+      "date": "2019-01-07 00:00:00 +0700",
+      "description": "This post is inspired by my answer to a question on StackOverflow on how to recursively read all the files in a directory.  It shows how async generator functions can be used in the real-world.\n",
+      "content": "This post is inspired by my answer to a question on StackOverflow on how to recursively read all the files in a directory in node. It shows how (recursive) async generator functions can be used in a real-world use case.\n\n\n  What are Async Iterators?\n  Recursively Reading All Files From a Directory\n  Consuming Async Iterators\n  Stream-Like Processing\n\n\nWhat are Async Iterators?\nAsync iterators are an upcoming feature of JavaScript that fills an important language gap: What happens when you combine an async function with a generator function?\n\nAsync functions return promises, generator functions return iterators, so what does an async generator function return? An iterator of promises!\n\nAn async generator function is declared with both the async and function* keywords:\n\nconst timeout = t =&gt; new Promise(r =&gt; setTimeout(r, t));\n\nasync function* foo() {\n  yield 1\n  await timeout(1000);\n  yield 2;\n  await timeout(1000);\n  yield 3;\n}\n\n\nSweet! So how can we use for something… useful?\n\nRecursively Reading All Files From a Directory\nConceptually, all the files in a directory are iterable. However, in order to find them we’ll have to perform asynchronous operations on the file system. Unless we want to do all the work upfront, we’re better off with an async iterator that returns a result whenever the necessary async operations complete.\n\nThe implementation below works in node 11+ without any additional flags:\n\nconst { resolve } = require('path');\nconst { readdir, stat } = require('fs').promises;\n\nasync function* getFiles(rootPath) {\n  const fileNames = await readdir(rootPath);\n  for (const fileName of fileNames) {\n    const path = resolve(rootPath, fileName);\n    if ((await stat(path)).isDirectory()) {\n      yield* getFiles(path);\n    } else {\n      yield path;\n    }\n  }\n}\n\n\nSimilar to normal generator functions, we can use the yield* keyword to defer to another (async) generator, enabling an elegant, recursive implementation of recursive directory search.\n\nIt’s efficient in the sense that it only looks as far into the directory as you ask it to. Unlike observables, async iterators are pull-based and only run when the next method on the underlying async iterator is called.\n\nConsuming Async Iterators\nA somewhat awkward way of using async iterators — but without special language features — is like this:\n\nfunction forAwait(asyncIter, f) {\n  asyncIter.next().then(({ done, value }) =&gt; {\n    if (done) return;\n    f(value);\n    forAwait(asyncIter, f);\n  });\n}\n\nforAwait(getFiles('.'), x =&gt; console.log(x));\n\n\nAs we can see, async iterators really are just iterators that return promises.\n\nWhile researching this post, I was surprised to find out that the above code will not exceed the call stack limit, suggesting that modern JavaScript engines support tail recursions!?\n\nHowever, the idiomatic way of consuming async iterators is via the new for-await-of loop. The following code produces the same result as the code above:\n\nfor await (const x of getFiles('.')) console.log(x);\n\n\nIn order for for await to work, it has to be wrapped inside an async function, i.e. (async () =&gt; { /* ... */ })(). When trying this out in the node REPL, note that for await is not covered by the --experimental-repl-await flag, so the IIAFE is still necessary.\n\nWe can upgrade our forAwait function to become sort of an asynchronous reduce:\n\nasync function reduce(asyncIter, f, init) {\n  let res = init;\n  for await (const x of asyncIter) {\n    res = f(res, x);\n  }\n  return res;\n}\n\n\nWith our new reduce function, we can “consume” an entire async iterator and push the results into an array:\n\nconst toArray = iter =&gt; reduce(iter, (a, x) =&gt; (a.push(x), a), []);\n\nconst files = await toArray(getFiles('.')); \n\n\nThis is similar to a traditional getFiles function that crawls an entire directory and returns all the files in a promise (see [my original answer on StackOverflow).\n\nStream-Like Processing\nIf we’re about to process the files in some way, why wait until we’ve crawled the entire directory before we continue? With async iterables we can run code as soon as the results come in:\n\n// Turn each file name into an object with a `name` property\nasync function* toObj(filesIter) {\n  for await (const name of filesIter) yield { name };\n}\n\n// Add the file size (which is another async operation)\nasync function* addFileSize(objIter) {\n  for await (const obj of objIter) {\n    const size = (await stat(obj.name)).size;\n    yield { ...obj, size };\n  }\n}\n\n// Compose functions\nconst processed = addFileSize(toObj(getFiles('.')))\n\n// Pull values from the pipeline\nfor await (const { name, size } of processed) {\n  console.log(`${name} (${size} bytes)`);\n}\n\n\nTo be fair, the code above is not very real-worldy. Also, the a(b(c()))-style function wrapping is not very readable. Hopefully either a function bind operator or a pipe operator is going to make this more practial in the future.\n\nFor now, this is how async iterators can be processed and combined to form new async iterators. It is similar to how stream processing works. In fact, both node and browser streams (are about to) implement the async iterator interface so they can be consumed in this way.\n\n\n\nFor more on iterator processing in JavaScript, check out my new post Solving Advent of Code Puzzles with ES Generators.\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/async-generators-in-the-wild/"
+    },{
+      
+      "image": "/assets/img/aoc.png",
+      "title": "Solving Advent of Code Puzzles with ES Generators",
+      "date": "2019-02-10 00:00:00 +0700",
+      "description": "JavaScript is not a great langauge for solving programming puzzeles such as Advent of Code, but ECMAScript’s new generator functions may change that.\n",
+      "content": "JavaScript is not a great langauge for solving programming puzzeles such as Advent of Code. It’s lack of a standard library, proper integer type, and general weirdness make it a bad choice for these type of problems.\n\nHowever, sometimes the tool you know best is best for the task at hand. Since I’ve been mostly using JS recently, I’ve felt more productive using it than any other language, even though I had to write my own functional programming library.\n\n\n  Iterator Operators\n  Infinite Sequences\n  A Little Iterator Library\n  Further Reading\n\n\nIterator Operators\nThanks to generator functions, operators can be implemented quickly and concisely. Not only is it a good learning experience, but it also gives you full knowledge of what’s happening in the background. For example, the ubiquitous map functions is easily implementas as:\n\nfunction map(f) {\n    return function* (xs) {\n        for (const x of xs) yield f(x);\n    }\n}\n\n\nNote that the inner function is a generator function (indicated by the *) that takes an iterable and returns an iterable. The reason why currying is applied here is to make it usable with a pipe function, so that we can write pipe(x, f, g, h) instead of f(g(h(x))):\n\nconst checksum = pipe(\n    ids,\n    map(id =&gt; frequencies(id)),\n    map(fqs =&gt; [\n        pipe(fqs.values(), some(x =&gt; x === 2)),\n        pipe(fqs.values(), some(x =&gt; x === 3)),\n    ]),\n    unzip2(),\n    map(xs =&gt; pipe(xs, map(x =&gt; x ? 1 : 0), sum())),\n    reduce((a, b) =&gt; a * b, 1),\n);\n\n\nThere is a lot going on here — and yes, this is a working solution for Day 2 — but the point is to show that there is a functional programming style that’s made possible by iterators and generators. Each of these operators has an implementation that’s similar to map in both length and complexity.\n\nWhat’s nice about these iterator-based operators is that intermediate results are never fully realized in memory, e.g. in the example above, at no point is there an array of all frequencies — just a generator with some local state that knows how to produce the next value.\n\nBy comparision, an implementation based on Array-methods would look something like this and produce an array of Maps and then another array of tuples, each of which is fully realized in memory, before proceeding to the next step.\n\nids\n    .map(id =&gt; frequencies(id))\n    .map(fqs =&gt; [\n        [...fqs.values()].some(x =&gt; x === 2),\n        [...fqs.values()].some(x =&gt; x === 3),\n    ]);\n\n\nInfinite Sequences\nIterator-based processing is especially handy when dealing with infinite sequences. For example, cycle repeats the provided sequence indefinitly:\n\nconst res = pipe(\n    cycle(input),\n    scan((a, b) =&gt; a + b, 0),\n    scan((seen, freq) =&gt;\n        seen.has(freq)\n            ? { reduced: freq }\n            : seen.add(freq),\n        new Set(),\n    ),\n    find(({ reduced }) =&gt; reduced)\n);\n\n\nWhat causes the above sequence to come to a stop is find. Once an element is found that meets the condition,the underlying implementation is no longer calling next on the generator up the chain, thereby ending the sequence. Obviously, at no point is an infinite sequence realized in memory.\n\nJust as with map, the implementation of find is rather compact:\n\nfunction find(p) {\n    return function (xs) {\n        for (const x of xs) {\n            if (p(x)) return x;\n        }\n        return null;\n    }\n}\n\n\nNote that next is implicitly being called as part of the for-of loop.\n\nTo show the full awesome might of these oparators, here is an almost complte solution for Day 10:\n\nconst RE = /position=&lt;(.*), (.*)&gt; velocity=&lt;(.*), (.*)&gt;/;\n\nconst [positions, velocities] = pipe(\n    lines,\n    map(line =&gt; RE.exec(line).slice(1).map(Number)),\n    map(([a, b, c, d]) =&gt; [[a, b], [c, d]]),\n    unzip2(),\n    map(it =&gt; [...it]),\n);\n\nconst [[finalPositions], sec] = pipe(\n    constantly(velocities),\n    scan((positions, velocities) =&gt; [...pipe(\n            zip(positions, velocities)\n            map(([[x, y], [dx, dy]]) =&gt; [x + dx, y + dy]),\n        )],\n        positions,\n    ),\n    pairwise(),\n    zipWith(range(1)),\n    find(([[prev, curr]]) =&gt; {\n        const prevSize = calcSize(getBounds(prev));\n        const currSize = calcSize(getBounds(curr));\n        return currSize &gt; prevSize;\n    }),\n);\n\n\nNote that sometimes we want to realize a sequence in memory on purpose (achieved by [...x]). Unlike arrays, iterators can only be traversed once, which causes problems when trying to use a result in multiple places. This is one of the major differences between array- and iterator-based processing: With the later, one has to pay attention to the difference between iterators and iterables.\n\nMaybe this is the reason why iterator-based functional programming reamains unpopular in JavaScript. The realiance on a pipe function to make complex pipelines possible is another. Hopefully this will become more practical with the introduction of a pipe operator.\n\nIn the meantime, take comfort in the fact that the implementation of pipe is really short as well:\n\nfunction pipe(x, ...fs) {\n    let res = x;\n    for (const f of fs) {\n        res = f(res);\n    }\n    return res;\n}\n\n\nA Little Iterator Library\n\nI’ve since turned the patterns here into a separte project called lilit (Florian’s Little Iterator Library), which comes in both an synchronous and asynchronous version. It’s still early but you can try it out like this:\n\nnpm install lilit\n\n\nFurther Reading\n\n\n  lilit — My little iterator library.\n  IxJS — A functionl library similar to RxJS, using iterators (archieved)\n  Ramda — A functional programming library for JS, using arrays\n  What is the difference between iterables and iterators\n  Advent of ES — My AoC 2018 solutions using iterators\n\n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/solving-advent-of-code-puzzles-with-es-generators/"
+    },{
+      
+      "image": "/assets/img/web-crypto-2.png",
+      "title": "Replacing CryptoJS with Web Cryptography for AES",
+      "date": "2019-08-13 00:00:00 +0700",
+      "description": "Alternative title: You Might Not Need CryptoJS.  In this post I’ll show how to replace CryptoJS’ AES module with the Web Cryptography API  for improved performance and security.\n",
+      "content": "With the spread of Service Worker and PWAs, a growing number of projects will have encrypted client-side storage as a requirement. In this post we’ll examine a commonly used JS cryptography library, do some basic due diligence on it, and then show a path towards replacing it with the browser’s own Web Cryptography API.\n\n\n  Basic Due Diligence\n  Replacing CryptoJS    \n      Overview\n      The CryptoJS Cipher Prefix\n      Dangerously Deriving Parameters\n      The EVP Key Derivation Function\n    \n  \n  Usage\n\n\nBasic Due Diligence\nCryptoJS is a popular library for doing cryptography in the browser. After doing some basic research, I’m convinced that it is not a production-quality cryptography library. Not by a long shot.\n\nWhat I found is a library of quasi-unknown origin, maintained by an amateur, unsafe default parameters, no bug bounty program, no published audit of any kind, and no discernable source of income, otherwise known as The Greatest Hits of Soon to be Broken Cryptography Libraries.\n\nThe fact that it is downloaded close to 1 million times per week speaks volumes to the sophistication of the average npm user and the lack of engineering standards in the frontend community at large1.\n\n\n\nReplacing CryptoJS\nIn this post we’ll be replacing CryptoJS’ AES module with the Web Cryptography API. The biggest challenge when phasing out CryptoJS is dealing with data previously encrypted by it. We can keep the dependency around for that purpose, but personally I’d rather delete it immediately and use standard APIs for decrypting old data instead.\n\nCryptoJS uses the standard AES-CBC algorithm which also ships as part of the Web Cryptography API. Web Crypto only includes a single padding scheme for non-block-sized payloads, but it’s the same one used by CryptoJS by default.\n\nHowever it gets more complicated with respect to key derivation. \nA peak under the hood reveals that the algorithm to derive a key from the passphrase is not standardized and therefore not part of Web Crypto, and it uses the broken MD5 hash that is also not part of Web Crypto.\nUnfortunately, we’ll have to support this in order to decrypt old data, but we can take some measures to prevent make it harder to abuse.\n\nOverview\nOur high level function is going to look like this:\n\nasync function decryptCryptoJSCipherBase64(cryptoJSCipherBase64, password, { \n  keySizeInt32 = 256 / 32,\n  ivSizeInt32  = 128 / 32,\n  iterations   = 1,\n} = {}) {\n  const { salt, ciphertext } = parseCryptoJSCipherBase64(cryptoJSCipherBase64);\n  const { key, iv } = await dangerouslyDeriveParameters(password, salt, keySizeInt32, ivSizeInt32, iterations);\n   \n  const plaintextArrayBuffer = await crypto.subtle.decrypt({ name: \"AES-CBC\", iv }, key, ciphertext);\n  return new TextDecoder().decode(plaintextArrayBuffer);\n}\n\n\nA couple of notes:\n\n\n  The default parameters are taken from CryptoJS.\n  I assume the cleartext is a string. If not you’ll have to remove the text decoding part.\n  We accept the cipher in base64 because that’s the default returned by CryptoJS’ toString function. You’ll have to adjust the code slightly to accept other formats.\n  I’m using verbose variable names because it’s really easy to mess up types and encodings otherwise.\n  All sizes in this article are given in multiples of 32-bit. I chose this unit because it is also used by CryptoJS, making it easier for the fast-moving npm-hacker to copy-paste the code and get it to work. To communicate this admittedly odd choice to everyone else, I borrow the DWORD designation from Microsoft where it is commonly known to be 32 bits I’ve updated the code to use the Int32 designation instead of DWORD.\n  I follow the React-tried-and-true practice of giving dangerous functions a verbose and uncomfortable name.\n\n\nThe CryptoJS Cipher Prefix\nNext we look at parsing the input ciphertext. CryptoJS prefixes the ciphertext with Salted__ (exactly 64 bits), followed by a 64-bit salt.\n\n+----------+----------+------------------------\n| Salted__ |  &lt;salt&gt;  | &lt;ciphertext...\n+----------+----------+------------------------\n|  64 bit  |  64 bit  | variable length\n\n\nTo retrieve the salt and ciphertext as Uint8Arrays we use the following. \nI should note that the following code is mostly extracted from CryptoJS and rewritten using modern JS idioms and APIs, specifically typed arrays.\n\nconst HEAD_SIZE_INT32 = 2;\nconst SALT_SIZE_INT32 = 2;\n\nfunction parseCryptoJSCipherBase64(cryptoJSCipherBase64) {\n  let salt;\n  let ciphertext = base64ToUint8Array(cryptoJSCipherBase64);\n\n  const [head, body] = splitUint8Array(ciphertext, HEAD_SIZE_INT32 * 4);\n\n  // This effectively checks if the ciphertext starts with 'Salted__'.\n  // Alternatively we could do `atob(cryptoJSCipherBase64.substr(0, 11)) === \"Salted__\"`.\n  const headDataView = new DataView(head.buffer);\n  if (headDataView.getInt32(0) === 0x53616c74 &amp;&amp; headDataView.getInt32(4) === 0x65645f5f) {\n    [salt, ciphertext] = splitUint8Array(body, SALT_SIZE_INT32 * 4);\n  }\n\n  return { ciphertext, salt };\n}\n\n\nI’ll provide the helper functions at the end, but given how verbose the names are, it’s suffice to say that they do exactly what they say they do.\n\nNotice the multiplications by 4 to go from Int32s to bytes, and the offset of 4 on getting the second Int32 value for the same reason.\n\nDangerously Deriving Parameters\nNext we shift our attention towards the enigmatic dangerouslyDeriveParameters function. \nThis is where we take a cryptographically weak passphrase and turn it into a supposedly strong cryptographic key.\nGiven the default parameters this is not actually the case.\n\nasync function dangerouslyDeriveParameters(password, salt, keySizeInt32, ivSizeInt32, iterations) {\n  const passwordUint8Array = new TextEncoder().encode(password);\n\n  const keyPlusIV = dangerousEVPKDF(passwordUint8Array, salt, keySizeInt32 + ivSizeInt32, iterations);\n  const [rawKey, iv] = splitUint8Array(keyPlusIV, keySizeInt32 * 4);\n\n  const key = await crypto.subtle.importKey(\"raw\", rawKey, \"AES-CBC\", false, [\"decrypt\"]);\n\n  return { key, iv };\n}\n\n\n\n  Note how both the key and IV are derived from the password. I think this would be okay if the KDF wasn’t so weak and the salt is random and unique, but this is not something the Web Cryptography API’s deriveKey function would support if it implemented the EVPKDF.\n  We only allow the key to be used for decryption. This is to prevent accidental or intentional use for encryption, for which it is too weak.\n\n\nThe EVP Key Derivation Function\nNext we turn to the dangerousEVPKDF function. It is the same key derivation function used by OpenSSL (google EVP_BytesToKey for details)\nand not dangerous by itself, but in the case of hard-coding MD5 as its hash function it certainly is.\n\nThis is the only part where we rely on an external dependency, because MD5 is not provided by the Web Cryptography API. I’m using js-md5 here because it supports array buffers, but did not do any research on it otherwise. I figured there’s no such thing as a safe MD5 implementation anyway. You have been warned.\n\nimport * as md5 from 'js-md5'\n\nfunction dangerousEVPKDF(passwordUint8Array, saltUint8Array, keySizeInt32, iterations) {\n  let derivedKey = new Uint8Array();\n  let block = new Uint8Array();\n\n  while (derivedKey.byteLength &lt; keySizeInt32 * 4) {\n    block = md5.arrayBuffer(concatUint8Arrays(block, passwordUint8Array, saltUint8Array));\n\n    for (let i = 1; i &lt; iterations; i++) {\n      block = md5.arrayBuffer(block);\n    }\n\n    derivedKey = concatUint8Arrays(derivedKey, new Uint8Array(block));\n  }\n\n  return derivedKey;\n}\n\n\nNote that this function could be made much more time and space efficient by pre-allocating and reusing typed arrays. However, it was easier to get it right this way, and it should also be easier to follow along.\n\nUsage\nThat’s it. We can now decrypt data perviously encrypted with CryptoJS at a fraction of the code size, mostly asynchronously, and mostly using fast native code.\n\nimport AES from 'crypto-js/aes';\n\nconst cleartext = \"This is a message to be encrypted and decrypted\";\nconst password = \"passw0rd!\";\nconst cryptoJSCipherBase64 = AES.encrypt(cleartext, password).toString();\n\ndecryptCryptoJSCipherBase64(cryptoJSCipherBase64, password).then(x =&gt; {\n  console.log(x);\n  console.log(x === cleartext);\n});\n\n\nAs promised, here is the link to the full example including utility functions. Keep in mind that these were not written with performance in mind and could all be improved.\n\nIn Part II we will deal with deriving a stronger key from the same passphrase and encrypting the data again. This is mostly run-of-the mill Web Crypto code and examples are readily available on the web. However, there’s some specialty involved with respect to dealing with the Salted__ prefix and integrating this nicely with the framework we’ve established in this post.\n\n\n\n\n  \n    \n      There are exceptions however, e.g. A Responsible Developer’s Encounter with CryptoJS in Two Acts. &#x21a9;&#xfe0e;\n    \n  \n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/replacing-cryptojs-with-web-cryptography-for-aes/"
+    },{
+      
+      "image": "/assets/img/async-constructor.png",
+      "title": "Async Constructor Pattern in JavaScript",
+      "date": "2020-02-21 00:00:00 +0700",
+      "description": "In this post I’ll show three design patterns that deal with async initialization and  demonstrate them on a real-world example.\n",
+      "content": "This is a little API pattern I came across while building a JS utility library that is using WebAssembly under the hood.\nInstantiating a WebAssembly instance is an async operation, so there is no way around propagating this to the caller1.\nIdeally, we would like to do this right in the constructor, but that is not possible (for good reasons).\n\n\n  Overview\n  Async Method Design\n  Lazy-Initialization\n  Conclusion\n  Appendix    \n      Why use classes?\n      Master Design\n      Typestate Pattern\n      Factory Functions\n    \n  \n\n\nOverview\nA pattern that I’ve seen is to have an asynchronous init function that does most of the initialization, but I think that’s a bad idea:\n\n  Am I going to call init() more than once? In fact, what if I do?\n  Didn’t I already express my intent of initializing by saying new?\n  Bonus: Can I write it as a one-liner?\n\n\nFor these reasons, what I prefer is the following:\n\nconst b64 = await new Base64Encoder().initialized;\n\n\nIt might not be obvious, but this is valid JavaScript — no extra parenthesis required. But how does this work? Let’s look at the class definition.\n\nI’m using (not yet finalized) private fields syntax for brevity, for production code I recommend using the WeakMap pattern instead.\n\nclass Base64Encoder {\n  #instancePromise;\n  #instance = null;\n\n  // No async constructors possible, but we can use an IIAFE for async code.\n  // Note that the return type of any async function is a promise, which we can store.\n  constructor() {\n    this.#instancePromise = (async () =&gt; {\n      const response = await fetch('./base64.wasm');\n      if (!response.ok) throw Error('...');\n      const arrayBuffer = await response.arrayBuffer();\n      return WebAssembly.instantiate(arrayBuffer); // no await\n    })();\n  }\n\n  // Again, no async getters are possible, but we can return a promise.\n  // Using a getter to ensure `readonly`-ness\n  get initialized() {\n    return this.#instancePromise.then(({ instance }) =&gt; {\n      this.#instance = instance; // store the result\n      return this; // this is what makes the one-liner possible!\n    });\n  }\n\n  encode(data) {\n    if (!this.#instance) throw Error(\"Didn't you forget something?\");\n    // Do something with `#instance`...\n  }\n}\n\n\nThis achieves our design objectives:\n\n\n  The initialization starts right away\n  We can’t call the initialize code more than once\n  We can create a new object in one line with a de-facto async constructor.\n\n\nThis is made possible by two key components:\n\n\n  A constructor that assigns a promise to a local variable (via an IIAFE) and\n  a getter that returns a promise that resolves to this. The getter ensures that the property is readonly.\n\n\nA lot is going on during initialization.\nLooking at it again with added parenthesis, the order should be clearer:\n\nconst b64 = await ((new Base64Encoder()).initialized);\n\n\n\n  A new object instance is created that starts the (async) initialization immediately\n  The initialized getter returns a promise that eventually resolves to the newly created instance.\n  The event loop takes over\n  ???\n  The initialization code finishes, “unblocking” the user code\n\n\nWhile I wouldn’t recommend it due to error-proneness, initialization can also be split in two:\n\nconst b64 = new Base64Encoder();\n// ...\nawait b64.initialized;\n// ...\nconst str = b64.encode(/*...*/)\n\n\nAsync Method Design\nThe design above has one major problem: If the caller forgets to await the initialized promise, calls to the API methods will fail. Worse: It might work depending on the timing, effectively introducing a race condition EDIT: Nope, this is taken care of by the assignment to the #instance field.\n\nThere is a another solution that does not require any kind of initialization — at least none that the caller is aware of — but it requires that the methods themselves are async, even though they wouldn’t have to be otherwise:\n\nclass Base64Encoder {\n  #instancePromise;\n\n  constructor() {\n    this.#instancePromise = (async () =&gt; {\n      const response = await fetch('./base64.wasm');\n      if (!response.ok) throw Error('...');\n      const arrayBuffer = await response.arrayBuffer();\n      return WebAssembly.instantiate(arrayBuffer);\n    })();\n  }\n\n  // CHANGED\n  async encode() {\n    const { instance } = await this.#instancePromise;\n    // Do something with `instance`...\n  }\n}\n\n\nThe main idea here is that we await the initialization promise at the beginning of every method call. It’s important to understand that the initialization code only runs once. Once a promise is resolved, we can await it as many times as we want, and it will resolve instantly (but there might be some minor overhead associated with the creation of a Promise behind the scenes).\n\nNow the API pattern as changed to\n\nconst b64 = new Base64Encoder()\nconst encoded = await b64.encode(/*...*/)\n\n\nLazy-Initialization\nEven though I stated in the beginning that immediate initialization is a design goal, one could reasonably prefer to delay initialization to a later point. The aforementioned async init() method will work in that case, but we could also delay it to the last possible moment: The first method call. Expanding on the async method design from before, we only have to make a minimal change:\n\nclass Base64Encoder {\n  #instancePromise = null;\n\n  // CHANGED\n  async encode() {\n    this.#instancePromise = this.#instancePromise || (async () =&gt; {\n      const response = await fetch('./base64.wasm');\n      if (!response.ok) throw Error('...');\n      const arrayBuffer = await response.arrayBuffer();\n      return WebAssembly.instantiate(arrayBuffer);\n    })();\n\n    const { instance } = await this.#instancePromise;\n    // Do something with `instance`...\n  }\n}\n\n\nRuby developers have seen this pattern before in the form of the ||= operator.\nThe result is the same: We assign to #instancePromise only once, and repeated invocations of encode are waiting for the same promise to resolve.\n\nConclusion\nIn this post I’ve showed three design patterns that deal with async initialization and demonstrated them on a real-world example. I’ve shown which pattern I prefer. While writing this post, I’ve stumbled on several more ideas that you can find below. There, you’ll also find your favorite pattern from that book I didn’t read.\n\nAppendix\nWhy use classes?\nI’m not a fan of classes but I will use them where they make sense, which is the case here because:\n\n\n  Node docs recommend isolating state for its upcoming ES modules support, for reasons explained in the linked article.\n  \n    For the WASM Base64 example above, it’s a good idea to give the user a hand in managing memory consumption, if only indirectly.\n\n    Specifically, the implementation might need to grow the WebAssembly memory to fit the data. Without attaching the WebAssembly instance to an object, the memory could never be garbage collected. We could discard the instance ourselves after each call, but that would prevent legitimate cases where the caller might want to use the same instance multiple times. I suspect this is also the reason why TextEncoder and TextDecoder are designed as classes and not functions.\n  \n\n\nMaster Design\nThe following code combines all 3 approaches outline above + the manual call to init() that I’ve mentioned in passing. While I said earlier that I don’t like the init pattern, note that the implementation below is protected against multiple invocations.\n\nclass Base64Encoder {\n  #instancePromise = null;\n  #instance = null;\n\n  async init() {\n    this.#instancePromise = this.#instancePromise || (async () =&gt; {\n      const response = await fetch('./base64.wasm');\n      if (!response.ok) throw Error('...');\n      const arrayBuffer = await response.arrayBuffer();\n      return WebAssembly.instantiate(arrayBuffer);\n    })();\n    const { instance } = await this.#instancePromise;\n    this.#instance = instance;\n  }\n\n  get initialized() {\n    return this.init().then(() =&gt; this);\n  }\n\n  encode() {\n    if (!this.#instance) throw Error(\"Didn't you forget something?\");\n    // ...\n  }\n\n  #promises = {\n    async encode(data) {\n      await this.init();\n      const { instance } = await this.#instancePromise;\n      // ...\n    },\n  };\n\n  get promises() {\n    return this.#promises;\n  }\n}\n\n\nTypestate Pattern\nWhen using TypeScript (but works with vanilla JS too), the initial design can be extended to include an additional class called Base64EncoderInitialized or similar that implements the encode method, while removing it from the original. Adapting the initialized promise so that it resolves to an instance of the new class gives us the static guarantee that encode can only be invoked after initialization is completed.\n\nget initialized() {\n  return this.#instancePromise.then(({ instance }) =&gt; new Base64EncoderInitialized(instance))\n}\n\n\nFactory Functions\nInstead of working around constructor and getter limitations, we can just define a static async function that does the initialization work and returns the new instance. We can spice it up by using a private symbol to prevent callers from creating uninitialized instances via the constructor (JS’ version of private constructors):\n\nconst CREATE = Symbol('create');\n\nclass Base64Encoder {\n  static async create() {\n    const obj = new Base64Encoder(CREATE);\n    // Do async initialization here\n    return obj;\n  }\n\n  constructor(token) {\n    if (token !== CREATE) {\n      throw Error(\"Base64Encoder can't be created via constructor, use Base64Encoder.create instead\");\n    }\n  }\n}\n\n// Usage\nconst base64 = await Base64Encoder.create();\n\n\n\n  \n    \n      See this article for more. While the article explains the subject matter well, I dislike that the author takes aim at async functions specifically, which is misplaced. The problem existed in node from Day 1: Once an API uses callbacks, all downstream code has to effectively adopt callbacks as well. But back then nobody was talking about the color of things, everyone was busy talking about the perils of callback hell. &#x21a9;&#xfe0e;\n    \n  \n\n",
+      "categories": ["software"],
+      "tags": [],
+      
+      "collection": "posts",
+      "url": "/posts/software/async-constructor-pattern/"
+    },{
+      
+      "image": "",
+      "title": "Finance",
+      "date": "2020-06-10 10:26:47 +0700",
+      "description": "Thoughts on cryptocurrencies and increasingly just finance in general.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "featured_categories",
+      "url": "/posts/finance/"
+    },{
+      
+      "image": "",
+      "title": "Random",
+      "date": "2020-06-10 10:26:47 +0700",
+      
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "featured_categories",
+      "url": "/posts/random/"
+    },{
+      
+      "image": "",
+      "title": "Software",
+      "date": "2020-06-10 10:26:47 +0700",
+      "description": "On software, particularly frontend engineering and functional programming.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "featured_categories",
+      "url": "/posts/software/"
+    },{
+      
+      "image": "/assets/img/projects/typonotes@0,5x.png",
+      "title": "Typonotes",
+      "date": "2011-06-18 00:00:00 +0700",
+      
+      "content": "Typonotes, later renamed “Freamon” (after watching too much The Wire), was my first larger web app.\n\nIt is a hairball of jQuery stacked on top of Google “Free Hosting” App Engine. Nonetheless, after 5 years of bitrot it works surprisingly well — until it hits GAE’s rate limits almost immediately, probably due to excessive polling.\n\nBuilt with the premise that there was no good looking notes app, this app has “pretentious teenager” written all over it.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/typonotes/"
+    },{
+      
+      "image": "/assets/img/projects/wisp@0,5x.png",
+      "title": "Wisp",
+      "date": "2012-04-13 00:00:00 +0700",
+      
+      "content": "Wisp, later renamed “Prez” (after the incredibly forgettable character from The Wire), was an attempt to solve the emerging “same password everywhere” problem. It is the security through obscurity version of 1Password and really should have been called “Password123” 😂.\n\nThe app was built with CoffeeScript, Backbone.js, require.js and jQuery Mobile.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/wisp/"
+    },{
+      
+      "image": "/assets/img/projects/stringer-bell@0,5x.png",
+      "title": "Stringer Bell",
+      "date": "2012-05-21 00:00:00 +0700",
+      
+      "content": "The purpose of Stringer Bell was to help its users stay productive by constantly interrupting them 🙄. Addtionally, an input field would prompt them to write a short description about the things accomplished during those last couple of minutes. While usign it, I’ve usually left it blank.\n\nThe app was built with Backbone.js and hosted on GAE. The clock consists of mostly &lt;div&gt;s with webfonts, background images, transform: rotate and the new (at the time) Canvas API for drawing the slices.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/stringer-bell/"
+    },{
+      
+      "image": "/assets/img/projects/onescore@0,5x.png",
+      "title": "Onescore",
+      "date": "2013-01-01 00:00:00 +0700",
+      "description": "Real-life achievements, The Next Big Thing. Post picutures of funny and or difficult challenges and earn rewards.\n",
+      "content": "Onescore was my first “big” project. I’ve spent an entire summer implementing what I thought would be The Next Big Thing: An achievement system for the real world. Some people had the same idea before, and many more afterwards, but none took off — including this one.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/onescore/"
+    },{
+      
+      "image": "/assets/img/projects/twittle-triad.png",
+      "title": "Twittle Triad",
+      "date": "2013-06-07 00:00:00 +0700",
+      
+      "content": "Remembering Final Fantasy XIII’s Triple Triad mini game better than it actually was, this version of the game turned the people you follow on Twitter into cards with their ranks based on the personas number of tweets, followers, etc.\n\nThe app was built on Meteor and is no longer available. It used CSS transitions and 3d transforms for the UI.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/twittle-triad/"
+    },{
+      
+      "image": "/assets/img/projects/github-language-graph@0,5x.png",
+      "title": "Github Language Graph",
+      "date": "2013-06-30 00:00:00 +0700",
+      "description": "Shows a pretty graph of the languages you use on Github.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/github-language-graph/"
+    },{
+      
+      "image": "/assets/img/projects/wkpda.png",
+      "title": "WKPDA",
+      "date": "2013-07-13 00:00:00 +0700",
+      
+      "content": "The problem with Wikipedia? Too much accuracy.\n\nIn this “the world according to Google autocomplete” version of Wikipedia, you can learn that President Obama is “checking your email” and “an alien”.\n\nThe app’s data was structured as a graph, so that users could subsequently check out other entities that are “checking your email” (0) or “an alien” (3), which made for a fun browsing experience.\n\nThe app was hacked together with Meteor within a couple of days and is no longer available.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/wkpda/"
+    },{
+      
+      "image": "/assets/img/projects/kings@0,5x.png",
+      "title": "Kings",
+      "date": "2014-02-20 00:00:00 +0700",
+      "description": "This app hides the fact that it’s a drinking game by replacing all occurrences of the word “drink” with a neat beer icon.\n",
+      "content": "This app hides the fact that it’s a sleazy drinking game by replacing all occurrences of the word “drink” with a neat icon, which not only increases its hipness factor but also — and more importantly — reduces legal liability.\n\nMost of the engineering effort went into smooth touch input and jank-free animations using requestAnimationFrame and CSS transform.\n\nUsing vh and vw for positioning and sizing makes it look great across devices and resolutions.\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/kings/"
+    },{
+      
+      "image": "/assets/img/projects/blocky-blocks@0,5x.jpg",
+      "title": "Blocky Blocks",
+      "date": "2014-06-16 00:00:00 +0700",
+      "description": "Minimalistic 3rd person arena shooter using C++ and OpenGL.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/blocky-blocks/"
+    },{
+      
+      "image": "/assets/img/projects/weights@0,5x.png",
+      "title": "Weights",
+      "date": "2014-07-26 00:00:00 +0700",
+      "description": "Solving a simple combinatorics problem using WebWorkers and showing the results in a React-based UI.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/weights/"
+    },{
+      
+      "image": "/assets/img/projects/meta@0,5x.jpg",
+      "title": "Meta",
+      "date": "2014-08-13 00:00:00 +0700",
+      "description": "A rock-paper-scissors-like game that shows personal information and past performance of the opponent to give players something to base their decisions on.\n",
+      "content": "Alternative title: Stereotypes, the Game.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/meta/"
+    },{
+      
+      "image": "/assets/img/projects/quest-text-reader@0,5x.png",
+      "title": "Quest Text Reader",
+      "date": "2014-10-04 00:00:00 +0700",
+      "description": "This simple React app and accompanying WoW addon uses the HTML5 Speech Synthesis API to read quests texts in a Blizzard TOS compliant way.\n",
+      "content": "This simple React app and accompanying WoW addon uses the HTML5 Speech Synthesis API to read quests texts in a Blizzard TOS compliant way.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/quest-text-reader/"
+    },{
+      
+      "image": "/assets/img/projects/cash-with-friends@0,5x.png",
+      "title": "Cash with Friends",
+      "date": "2015-02-09 00:00:00 +0700",
+      "description": "Sending, receiving and keeping track of IOUs between Facebook friends with a UI that is reminiscent of messaging apps like WhatsApp.\n",
+      "content": "If the best way to build a business is to “make something people want”, this was the exact opposite. Keeping track of every last cent simply wasn’t something people wanted, at least not those with either cash or friends.\n\nOn the upside, making the app feel like WhatsApp was a good design decision and at the time similar apps generally felt worse. In retrospect, doubling down on the chat metaphor would have been an interesting route to explore.\n\nDesign\nI kept the design intentionally minimalistic, but pairing the already dull subject of money with the excitement of excel spreadsheets was the wrong time to atone for the design sins of the past.\n\nThe spartan aesthetics didn’t prevent me from making bad UI decisions, such as the icons which were confusing to everybody except myself, and the input form which routinely led people to do the exact opposite of what they wanted to do, including myself.\n\nTech\nThe UI was a fairly complex React app using the then popular Flux architecture.\nThe frontend is fully responsive, has nice page transitions, working links and browser navigation and just felt snappy overall.\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/cash-with-friends/"
+    },{
+      
+      "image": "/assets/img/projects/wilson.svg",
+      "title": "Wilson",
+      "date": "2016-09-05 00:00:00 +0700",
+      "description": "Microservice case study for reddit-style voting, written in Clojure and powered by Ring, Compojure and compojure-api.\n",
+      "content": "Doing some basic backend work while exploring the Clojure ecosystem.\n\n\n  Ranking is based on How Not to Sort by Average Rating\n  The code follows the twelve-factor app recommendations\n  The application is written in Clojure\n  The API is powered by Ring, Compojure and compojure-api\n  API documentation is provided by Swagger.\n  Runs inside a Docker container\n  Uses RethinkDB for storage\n\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/wilson/"
+    },{
+      
+      "image": "/assets/img/projects/hydejack-v6@0,5x.jpg",
+      "title": "Hydejack 6",
+      "date": "2016-10-01 00:00:00 +0700",
+      "description": "A pretentious two-column Jekyll theme, stolen by @qwtel from Hyde. You could say it was.. hydejacked.\n",
+      "content": "Hydejack is a complete, interactive, configureable, responsive, reactive, mobile-first, touch-enabled, animated, printable, tab-able, fast1, search engine-friendly and robust Jekyll theme that feels like a modern web app, while preserving what is great about web pages: Working URLs, hyperlinks, a working back button, a working refresh button and less than 50MB of JavaScript (tongue-in-cheek).\n\nIt can be hosted on GitHub Pages, where it has support for categories and tags, math blocks via KaTeX,\ncomments via Disqus, multiple authors, a sidebar that turns into a drawer menu on mobile, two different blog layouts, a wide array of social media icons and much more. It also looks pretty good.\n\nThe site works all the way down to IE10. It works in IE9 if you don’t need fancy animations, and even IE5 if you don’t need fancy anything. Rumor has it, you can even view it via lynx.\n\n\n  \n    \n      Hydejack is fast in two different ways. Its perceived speed hides latency through a combination of animations and a complex pre-fetching logic. Load speed is achieved through inlining critical CSS and removing non-essential requests from the critical rendering path. &#x21a9;&#xfe0e;\n    \n  \n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hydejack-6/"
+    },{
+      
+      "image": "/assets/img/projects/modern-webgl@0,25x.png",
+      "title": "Modern WebGL",
+      "date": "2016-11-01 00:00:00 +0700",
+      "description": "WebGL implementation of the popular OpenGL tutorial by Tom Dalling.\n",
+      "content": "Tom’s tutorial has been a huge help during the making of Blocky Blocks.\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/modern-webgl/"
+    },{
+      
+      "image": "/assets/img/projects/ducky-hunting.png",
+      "title": "Ducky Hunting",
+      "date": "2017-03-11 00:00:00 +0700",
+      "description": "Ducky Hunting was supposed to be a VR clone of 2000s viral shareware game ‘Die Virtuelle Moorhuhn Jagd’. Due to development difficulties it never got finished.\n",
+      "content": "Ducky Hunting was supposed to be a VR clone of the viral shareware game ‘Die Virtuelle Moorhuhn Jagd’, which was popular in Germany in the early 2000s and later known as Crazy Chicken internationally.\n\n\nUsing cutouts to replicate the 2D sprite look of the original.\n\nRealizing that early VR hardware (Google Cardboard, GearVR) would work pretty well for Point&amp;Click games when turning them into “Look&amp;Click”, we’ve set out to build a VR version of the game.\n\n\nThe menu of the game with floating 3D logo.\n\nThe combination of simplicity, nostalgia, and travel (the idea was to create different locations around the world, starting with the Alps) would have made for a potentially addictive mix, but development difficulties prevented it from getting finished.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/ducky-hunting/"
+    },{
+      
+      "image": "/assets/img/hy-push-state.svg",
+      "title": "hy-push-state",
+      "date": "2017-09-25 00:00:00 +0700",
+      "description": "hy-push-state is a web component that lets you turn web pages into web apps.\n",
+      "content": "hy-push-state is a web component that lets you turn web pages into web apps. The component dynamically loads new content (formerly known as “ajax”) and inserts it into the current page, without causing Flash of White, Flash of Unstyled Content, etc.\n\n\n  Turn static web sites into dynamic web apps.\n\n\nhy-push-state is similar to pjax and smoothState, but offers a more advanced pre-fetching logic and gives you more control over its internals to enable advanced page transition animations.\n\nhy-push-state is used by hundreds of sites as part of the Hydejack Jekyll theme.\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hy-push-state/"
+    },{
+      
+      "image": "/assets/img/hy-drawer.svg",
+      "title": "hy-drawer",
+      "date": "2017-09-26 00:00:00 +0700",
+      "description": "hy-drawer is a touch-enabled drawer web component for the modern web.\n",
+      "content": "hy-drawer is a touch-enabled drawer component for the modern web. It focuses on providing a fun, natural feel in both the Android and iOS stock browser, while being performant and easy to use. It is the perfect companion for mobile-first web pages and progressive web apps.\n\n\n  A touch-enabled drawer component for the modern web.\n\n\nhy-drawer is used by hundreds of sites as part of the Hydejack Jekyll theme.\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hy-drawer/"
+    },{
+      
+      "image": "/assets/img/projects/hydejack-v7@0,5x.jpg",
+      "title": "Hydejack 7",
+      "date": "2017-09-27 00:00:00 +0700",
+      "description": "A Jekyll theme with JavaScript Powers. “Best Theme by a Mile”. Combines the best of static sites and modern web apps.\n",
+      "content": "Hydejack is a cutting-edge Jekyll theme that combines the best of static sites and modern web apps. It features a suite of JavaScript that makes the page feel like an app, without sacrificing backwards-compatibility, page-load speed or SEO.\n\nIt aims to be the complete package for professionals on the web. It features a blog suitable for both prose and technical documentation, a showcase for projects and a resume that fits with the rest of the design.\n\nIt’s best to just see it in action.\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hydejack-7/"
+    },{
+      
+      "image": "/assets/img/hy-img.svg",
+      "title": "hy-img",
+      "date": "2018-03-01 00:00:00 +0700",
+      "description": "hy-img is a web component for lazy-loading images with in-flight request cancellation for images that are scrolled out of view.\n",
+      "content": "\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hy-img/"
+    },{
+      
+      "image": "/assets/img/js16-9.svg",
+      "title": "Platform Parity",
+      "date": "2018-06-01 00:00:00 +0700",
+      "description": "The Platform Parity project attempted to replicate the browser environment in node as closely as possible.\n",
+      "content": "Frustrated with the fact that the JavaScript ecosystem is split in half between the browser and node, I set out to replicate the browser environment in node as closely as possible (reaching “parity”).\n\nThere are many browser APIs that do similar things as node, such as\n\n  Fetch API — HTTP requests,\n  Streams API — streams\n  Service Worker API — servers/responding to requests\n  Web Crypography — crypto\n  IndexedDB — database abstraction\n  …\n\n\nMany independent libraries exist to fill these gaps (requests, streams, cryptography) but so far there has been no unifying library to pull them together.\n\nUnfortunately, progress was halted due to\n\n  the performace impact of loading many libraries at startup\n  bugs related to patching the global object\n  the difficulty of implementing browser standards correctly\n\n\nIn order to revive the project, it would have to be part of serverless offering similar to CloudFlare Workers or Netlify Functions. Instead of patching node, it would have to run in it’s own environment. Hints should be taken form deno.\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/platform-parity/"
+    },{
+      
+      "image": "/assets/img/projects/hydejack-8@0,5x.jpg",
+      "title": "Hydejack 8",
+      "date": "2018-07-01 00:00:00 +0700",
+      "description": "“Best Jekyll Theme by a Mile”. Hydejack is your presence on the web, featuring a blog, portfolio, and resume.\n",
+      "content": "Hydejack is your presence on the web. It gives you a blog that is suitable for both prose and technical documentation, a portfolio to showcase your projects, and a beautiful resume template that looks amazing on the web and in print.\n\n\n  Your presence on the web — A blog, a portfolio, and a resume.\n\n\nThere are two versions of Hydejack: The base version is free, while features that are specific to professionals are a payed upgrade.\n\nDownload Free\n– or –\n\n– or –\nBuy PRO — $59\n\n",
+      "categories": [],
+      "tags": [],
+      
+      "collection": "projects",
+      "url": "/projects/hydejack-8/"
+    },{
+      
+      "image": "/assets/img/ts16-9.svg",
+      "title": "lilit",
+      "date": "2019-03-03 00:00:00 +0700",
+      "description": "lilit (Florians’s little iterator library) is a library that is so simple, you could’ve written it yourself.\n",
+      "content": "Faced with the challenge of solving Advent of Code puzzeles in JavaScript without a proper standard library, I’ve started implementing my own. I’ve quickly realized that it is surprisingly easy to implement common operators such as map and reduce using ECMAScript’s generator functions. Eventually the utility  library grew to the point where releasing it separately made sense.\n\nnpm install lilit\n\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/lilit/"
+    },{
+      
+      "image": "/assets/img/serverless.svg",
+      "title": "Eden",
+      "date": "2019-03-10 00:00:00 +0700",
+      "description": "Eden is a universal data translation API and CLI. It translates data to and from JSON, XML, YAML, TOML, and EDN.\n",
+      "content": "\n  Data is Bliss\n\n\nData is bliss. Unfortunately, it’s too often stuck in one format and needs to be tranlated to another to be useful in a specific context. Eden aims to be the one stop API to translate between different formats.\n\nExample\nXML\n&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n&lt;root&gt;\n  &lt;groupId&gt;com.googlecode.json-simple&lt;/groupId&gt;\n  &lt;artifactId&gt;json-simple&lt;/artifactId&gt;\n  &lt;version&gt;1.1.1&lt;/version&gt;\n&lt;/root&gt;\n\n\nJSON\n{\n  \"groupId\": \"com.googlecode.json-simple\",\n  \"artifactId\": \"json-simple\",\n  \"version\": \"1.1.1\"\n}\n\n\nEDN\n{:groupId \"com.googlecode.json-simple\",\n :artifactId \"json-simple\", \n :version \"1.1.1\"}\n\n\nYAML\ngroupId: com.googlecode.json-simple\nartifactId: json-simple\nversion: 1.1.1\n\n\nTOML\ngroupId = \"com.googlecode.json-simple\"\nartifactId = \"json-simple\"\nversion = \"1.1.1\"\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/eden/"
+    },{
+      
+      "image": "/assets/img/stencil.svg",
+      "title": "Pencil Runtime",
+      "date": "2019-04-03 00:00:00 +0700",
+      "description": "Standalone Stencil runtime. Stencil - Compiler + Extras = Pencil. Alternative explanation: SkateJS with Stencil decorator syntax.\n",
+      "content": "Standalone Stencil runtime.\n\nStencil - Compiler + Extras = Pencil\n\nAlternative explanation: SkateJS with Stencil decorator syntax.\n\nWhy\n\n  Not dependent on TypeScript (only decorators are required)\n  Build a single bundle using webpack/rollup\n  No duplicate code (dependencies!)\n  No polyfills\n  ???\n\n\nExample\n\n// File: my-first-component.jsx\n\n// Additional import of `h` is required to make `render` work.\nimport { h, Component, Prop } from 'pencil-runtime';\n\n@Component({\n  tag: 'my-first-component',\n  shadow: true,\n})\nexport class MyComponent {\n  // Extra `type` parameter is necessary \n  // b/c it cannot be inferred at runtime.\n  @Prop({ type: String, mutable: true, reflectToAttr: true }) name;\n\n  render() {\n    return (\n      &lt;p&gt;\n        Hello, {this.name}!\n      &lt;/p&gt;\n    );\n  }\n}\n\n\nUsage:\n\n// File: main.js\nimport `./my-first-component.jsx`;\n\n// my-first-component is now defined:\n\nconst mfc = document.createElement('my-first-component');\nmfc.name = \"World\";\ndocument.body.appendChild(mfc;)\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/pencil-runtime/"
+    },{
+      
+      "image": "/assets/img/jekyll.svg",
+      "title": "Jekyll Replace Image",
+      "date": "2019-04-04 00:00:00 +0700",
+      "description": "A Jekyll plugin to replace img tags with custom elements during site generation.\n",
+      "content": "A Jekyll plugin to replace img tags with custom elements during site generation.\n\nWhat it does\n\nIt runs a regular expression to find HTML img tags against the output of each page and replaces matches with a user-defined replacement.\n\nThere are a number of custom elements you can use, such as progressive-img, amp-img and (my very own) hy-img.\n\nNote that replacing images during site generation is necessary for lazy-loading, because the browser will start loading any img tag as soon as it is parsed, before it can be touched by client side code.\n\nWhy\n\n\n  Lazy-loading images increases page load speed and is recommended by Google.\n  So you can use the ![alt](src) syntax for images without polluting your posts with lengthy HTML tags.\n\n",
+      "categories": [],
+      "tags": ["software"],
+      
+      "collection": "projects",
+      "url": "/projects/jekyll-replace-img/"
+    }
+  ]
+}
+

@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/qwtel
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://qwtel.com
+  * I am qwtel (https://keybase.io/qwtel) on keybase.
+  * I have a public key ASCbFur24236CAj1oGXKHjjTVGaT35JcTLQNXvXUFG7aOwo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01209b16eaf6e36dfa0808f5a065ca1e38d3546693df925c4cb40d5ef5d4146eda3b0a",
+      "host": "keybase.io",
+      "kid": "01209b16eaf6e36dfa0808f5a065ca1e38d3546693df925c4cb40d5ef5d4146eda3b0a",
+      "uid": "56f1a36e9c62373901dd1e1b43a6bb19",
+      "username": "qwtel"
+    },
+    "merkle_root": {
+      "ctime": 1550758617,
+      "hash": "b08296cf1dc70c63d34e8873a5ce485ae84b54dbdae7e54b2e228320d3fbf1d8eb3ca8cd98105e216572aefcd097cefdf6714504f7c8ec4a03fec482419b64d5",
+      "hash_meta": "a95dd85f3a7c1a56ba4a0749ffe138a208c1bcf68d1636cfae9feab41af4c0a6",
+      "seqno": 4805315
+    },
+    "service": {
+      "entropy": "769JgMKZNRD8MjJLD9tjqF/7",
+      "hostname": "qwtel.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "3.0.0"
+  },
+  "ctime": 1550758679,
+  "expire_in": 504576000,
+  "prev": "1ec751cd1b21c12331a51de2932d1fcb4234f7aab35f961ef28c5c910591fed4",
+  "seqno": 8,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgmxbq9uNt+ggI9aBlyh4401Rmk9+SXEy0DV711BRu2jsKp3BheWxvYWTESpcCCMQgHsdRzRshwSMxpR3iky0fy0I096qzX5Ye8oxckQWR/tTEIPQUzrTntGtvyWGBakSEN6yr8/RW/O+3Ka7i9W6UlGRBAgHCo3NpZ8RABoeUULKfOi9YBWmIpQjAp8bp63HddTK1Y9fRqrvFe8Jjw/O6vnGTaAb4Aiv9uORzwiqhn2On02eRlR6qEGJ/A6hzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIMbv/Mr/j7PS9UxVGvpCeQzrj32Fnut4CwXSozBhaeF6o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/qwtel
+
+==================================================================
